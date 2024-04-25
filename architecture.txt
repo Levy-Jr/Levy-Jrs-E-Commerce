@@ -1,0 +1,16 @@
+E-commerce for computer peripherals
+
+- e-commerce admin dashboard
+-- auth
+-- overview
+-- products management
+
+- e-commerce store
+-- home
+-- store
+--- product page
+-- contact
+--- email
+-- download
+-- my account
+-- shopping cart
