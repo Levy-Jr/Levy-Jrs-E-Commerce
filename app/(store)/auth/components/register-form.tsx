@@ -1,7 +1,10 @@
 "use client"
 
+import { register } from "@/actions/register"
+import { FormError } from "@/components/form-error"
+import { FormSuccess } from "@/components/form-success"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { RegisterSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -27,8 +30,17 @@ const RegisterForm = () => {
     }
   })
 
-  const onSubmit = async (data: RegisterFormValues) => {
-    console.log(data)
+  const onSubmit = async (values: RegisterFormValues) => {
+    setError("")
+    setSuccess("")
+
+    startTransition(() => {
+      register(values)
+        .then(data => {
+          setError(data.error)
+          setSuccess(data.success)
+        })
+    })
   }
 
   return (
@@ -54,6 +66,7 @@ const RegisterForm = () => {
                       placeholder="NOME COMPLETO *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -70,6 +83,7 @@ const RegisterForm = () => {
                       placeholder="CPF *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -86,6 +100,7 @@ const RegisterForm = () => {
                       placeholder="TELEFONE *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -102,6 +117,7 @@ const RegisterForm = () => {
                       placeholder="E-EMAIL *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -118,10 +134,13 @@ const RegisterForm = () => {
                       placeholder="SENHA *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button
             disabled={isPending}
             type="submit"

@@ -25,6 +25,9 @@ const LoginForm = () => {
   })
 
   const onSubmit = async (data: LoginFormValues) => {
+    setError("")
+    setSuccess("")
+
     console.log(data)
   }
 
