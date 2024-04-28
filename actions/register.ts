@@ -2,7 +2,7 @@
 
 import * as z from "zod"
 import bcrypt from "bcryptjs"
-import { RegisterSchema } from "@/schemas"
+import { RegisterSchema } from "@/schemas/authSchema"
 import { getUserByEmail } from "@/data/user"
 import { db } from "@/lib/db"
 

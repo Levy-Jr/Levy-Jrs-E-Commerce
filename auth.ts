@@ -3,6 +3,7 @@ import authConfig from "@/auth.config"
 import NextAuth from "next-auth"
 import { db } from "./lib/db"
 import { UserRole } from "@prisma/client"
+import { getUserById } from "@/data/user"
 
 export const {
   handlers: { GET, POST },
@@ -11,7 +12,7 @@ export const {
   signOut
 } = NextAuth({
   pages: {
-    signIn: "/auth/login",
+    signIn: "/auth",
     error: "/auth/error"
   },
   callbacks: {
@@ -21,7 +22,10 @@ export const {
       }
 
       if (token.role && session.user) {
+        session.user.fullName = token.fullName as string;
+        session.user.phoneNumber = token.phoneNumber as string;
         session.user.role = token.role as UserRole;
+        session.user.cpf = token.cpf as string;
       }
 
       if (session.user) {
@@ -30,7 +34,21 @@ export const {
       }
 
       return session
-    }
+    },
+    async jwt({ token }) {
+      if (!token.sub) return token
+
+      const existingUser = await getUserById(token.sub)
+
+      if (!existingUser) return token;
+
+      token.fullName = existingUser.fullName
+      token.phoneNumber = existingUser.phoneNumber
+      token.role = existingUser.role
+      token.cpf = existingUser.cpf
+
+      return token
+    },
   },
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },

@@ -1,6 +1,7 @@
 import { currentRole } from "@/lib/auth"
 import { UserRole } from "@prisma/client"
 import { redirect } from "next/navigation"
+import AdminNavbar from "./_components/admin-navbar"
 
 export default async function AdminLayout({
   children
@@ -13,6 +14,7 @@ export default async function AdminLayout({
 
   return (
     <>
+      <AdminNavbar />
       {children}
     </>
   )

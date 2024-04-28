@@ -1,9 +1,11 @@
 "use client"
 
+import { login } from "@/actions/login"
+import { FormError } from "@/components/form-error"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { LoginSchema } from "@/schemas"
+import { LoginSchema } from "@/schemas/authSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
@@ -13,7 +15,6 @@ type LoginFormValues = z.infer<typeof LoginSchema>
 
 const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("")
-  const [success, setSuccess] = useState<string | undefined>("")
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<LoginFormValues>({
@@ -24,11 +25,15 @@ const LoginForm = () => {
     }
   })
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const onSubmit = async (values: LoginFormValues) => {
     setError("")
-    setSuccess("")
 
-    console.log(data)
+    startTransition(() => {
+      login(values)
+        .then(data => {
+          setError(data?.error)
+        })
+    })
   }
 
   return (
@@ -50,6 +55,7 @@ const LoginForm = () => {
                       placeholder="E-MAIL *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -66,10 +72,12 @@ const LoginForm = () => {
                       placeholder="SENHA *"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+          <FormError message={error} />
           <Button
             className="w-full bg-red-600 hover:bg-red-500 font-bold tracking-widest"
             type="submit"

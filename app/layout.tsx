@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Levy Jr's E-commerce",
+  title: "Loja - Levy Jr Store",
   description: "The biggest E-commerce of all time",
 };
 
@@ -16,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-black text-white`}>{children}</body>
+      <body className={`${inter.className}`}>
+        {children}
+      </body>
     </html>
   );
 }
