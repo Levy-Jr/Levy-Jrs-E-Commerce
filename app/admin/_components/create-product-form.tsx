@@ -27,7 +27,13 @@ export const CreateProductForm = ({
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(CreateProductSchema)
+    resolver: zodResolver(CreateProductSchema),
+    defaultValues: {
+      name: "",
+      desc: "",
+      price: 0,
+      categoryId: ""
+    }
   })
 
   const onSubmit = (values: ProductFormValues) => {
@@ -107,6 +113,7 @@ export const CreateProductForm = ({
               <FormItem>
                 <FormControl>
                   <Input
+                    type="number"
                     className="text-black"
                     {...field}
                     disabled={isPending}

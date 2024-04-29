@@ -6,6 +6,7 @@ import { FormSuccess } from "@/components/form-success"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { escapeCPF } from "@/lib/utils"
 import { RegisterSchema } from "@/schemas/authSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
@@ -34,17 +35,19 @@ const RegisterForm = () => {
     setError("")
     setSuccess("")
 
-    startTransition(() => {
-      register(values)
-        .then(data => {
-          setError(data.error)
-          setSuccess(data.success)
-        })
-    })
+    console.log(values.cpf)
+
+    /*     startTransition(() => {
+          register(values)
+            .then(data => {
+              setError(data.error)
+              setSuccess(data.success)
+            })
+        }) */
   }
 
   return (
-    <div className="bg-zinc-800 w-full max-w-[30rem] font-bold p-6 rounded-md">
+    <div className="shadow-xl w-full max-w-[30rem] font-bold p-6 rounded-md">
       <h2 className="text-center tracking-wider">CRIAR CONTA</h2>
       <p className="text-sm font-normal mt-4">Campos com (*) são obrigatórios.</p>
       <Form {...form}>
@@ -60,7 +63,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
                       placeholder="NOME COMPLETO *"
@@ -77,8 +80,10 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      type="number"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
+                      onChange={e => field.onChange(escapeCPF(e.target.value))}
                       disabled={isPending}
                       placeholder="CPF *"
                     />
@@ -94,7 +99,8 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      type="number"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
                       placeholder="TELEFONE *"
@@ -111,7 +117,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
                       placeholder="E-EMAIL *"
@@ -128,7 +134,8 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      type="password"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
                       placeholder="SENHA *"

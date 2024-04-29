@@ -8,3 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 export const escapeCPF = (cpf: string) => {
   return cpf.replace(/\.|-/gm, '')
 }
+
+export const currencyFormatter = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL"
+})

@@ -10,13 +10,13 @@ export const LoginSchema = z.object({
 })
 
 export const RegisterSchema = z.object({
-  fullName: z.string().trim().min(2, "A valid name is required").transform(str => str.split(' ')).refine(val => val.length > 1, 'A full name is required').transform(str => str.join(' ')),
-  cpf: z.string().length(11, 'Invalid cpf'),
-  phoneNumber: z.string().length(13),
+  fullName: z.string().trim().min(2, "Escreva um nome válido").transform(str => str.split(' ')).refine(val => val.length > 1, 'Escreva um nome completo').transform(str => str.join(' ')),
+  cpf: z.string().length(11, 'Cpf inválido'),
+  phoneNumber: z.string().length(13, "O número precisa ter 13 digitos"),
   email: z.string().email({
-    message: "Email is required"
+    message: "Email é obrigatório"
   }),
   password: z.string().min(6, {
-    message: "Minimum 6 characters required"
+    message: "Pelo menos 6 caracteres"
   })
 })

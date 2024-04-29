@@ -36,8 +36,8 @@ const Navbar = () => {
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:bg-red-600 p-2 rounded-md tracking-widest",
-            route.active ? "bg-red-600" : ""
+            "text-sm font-medium transition-colors hover:bg-red-600 hover:text-white p-2 rounded-md tracking-widest",
+            route.active ? "bg-red-600 text-white" : ""
           )}
         >
           {route.label.toUpperCase()}

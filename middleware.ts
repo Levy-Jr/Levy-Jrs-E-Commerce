@@ -1,5 +1,3 @@
-import NextAuth from "next-auth"
-
 import { auth } from "@/auth"
 import { adminPrefix, authRoutes } from "@/routes"
 
@@ -17,9 +15,11 @@ export default auth(req => {
     return;
   }
 
+  if (nextUrl.pathname === "/my-account") {
+    if (!isLoggedIn) return Response.redirect(new URL("/auth", nextUrl))
+  }
+
   if (!isAdminRoute) return
-
-
 })
 
 export const config = {

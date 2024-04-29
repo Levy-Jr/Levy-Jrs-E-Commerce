@@ -37,7 +37,7 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="bg-zinc-800 max-w-[30rem] w-full font-bold p-6 rounded-md">
+    <div className="shadow-xl max-w-[30rem] w-full font-bold p-6 rounded-md">
       <h2 className="text-center tracking-wider">ACESSE SUA CONTA</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -49,7 +49,7 @@ const LoginForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
                       placeholder="E-MAIL *"
@@ -66,7 +66,8 @@ const LoginForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-slate-900 border-none font-bold tracking-widest"
+                      type="password"
+                      className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
                       placeholder="SENHA *"
