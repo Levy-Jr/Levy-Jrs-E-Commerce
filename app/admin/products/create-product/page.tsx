@@ -1,12 +1,12 @@
 import { db } from "@/lib/db"
-import { CreateProductForm } from "../../_components/create-product-form"
+import { ProductForm } from "../../_components/product-form"
 
 const CreateProductPage = async () => {
   const categories = await db.category.findMany({})
 
   return (
     <div>
-      <CreateProductForm
+      <ProductForm
         categories={categories}
       />
     </div>

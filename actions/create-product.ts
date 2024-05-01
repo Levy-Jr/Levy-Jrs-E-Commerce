@@ -1,18 +1,17 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { z } from "zod"
 import fs from "fs/promises"
 import { CreateProductSchema } from "@/schemas/productSchema"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
-type CreateProductValues = z.infer<typeof CreateProductSchema>
+export const createProduct = async (values: FormData) => {
+  const validatedFields = CreateProductSchema.safeParse(Object.fromEntries(values.entries()))
 
-export const createProduct = async (values: CreateProductValues) => {
-  const validatedFields = CreateProductSchema.safeParse(values)
-
-  if (!validatedFields.success) return validatedFields.error.formErrors.fieldErrors
+  if (!validatedFields.success) {
+    return validatedFields.error.formErrors.fieldErrors
+  }
 
   const { categoryId, name, desc, price, image } = validatedFields.data
 

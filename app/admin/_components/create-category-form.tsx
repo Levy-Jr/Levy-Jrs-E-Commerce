@@ -19,7 +19,10 @@ export const CreateCategoryForm = () => {
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(CreateCategorySchema)
+    resolver: zodResolver(CreateCategorySchema),
+    defaultValues: {
+
+    }
   })
 
   const onSubmit = (values: CategoryFormValues) => {
@@ -59,7 +62,7 @@ export const CreateCategoryForm = () => {
         </div>
         <div className="flex justify-end gap-4 mt-5">
           <Button className="bg-transparent hover:bg-red-700" asChild>
-            <Link href="/admin/category">Voltar</Link>
+            <Link href="/admin/products">Voltar</Link>
           </Button>
           <Button type="submit">
             {isPending ? "Cadastrando..." : "Cadastrar"}

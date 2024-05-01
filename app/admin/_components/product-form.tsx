@@ -1,34 +1,47 @@
 "use client"
 
 import { createProduct } from "@/actions/create-product"
+import { updateProduct } from "@/actions/update-product"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { CreateProductSchema } from "@/schemas/productSchema"
+import { CreateProductSchema, UpdateProductSchema } from "@/schemas/productSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Category } from "@prisma/client"
+import { Category, Product } from "@prisma/client"
+import Image from "next/image"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+/* tirando o type de "price" no type Product e setando ele para number. Antes ele estava como "decimal" e estava dando erro */
+type CleanProduct = Omit<Product, 'price'> & { price: number }
+
 type CreateProductFormProps = {
-  categories: Category[]
+  categories: Category[];
+  initialData?: CleanProduct | null;
 }
+
 type ProductFormValues = z.infer<typeof CreateProductSchema>
 
-export const CreateProductForm = ({
-  categories
+export const ProductForm = ({
+  categories,
+  initialData
 }: CreateProductFormProps) => {
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(CreateProductSchema),
-    defaultValues: {
+    resolver: zodResolver(initialData ? UpdateProductSchema : CreateProductSchema),
+    defaultValues: initialData ? {
+      name: initialData.name,
+      desc: initialData.desc,
+      price: Number(String(initialData.price)),
+      categoryId: initialData.categoryId
+    } : {
       name: "",
       desc: "",
       price: 0,
@@ -40,8 +53,21 @@ export const CreateProductForm = ({
     setError("")
     setSuccess("")
 
-    startTransition(() => {
-      createProduct(values)
+    startTransition(async () => {
+      const formData = new FormData();
+      if (values.image) {
+        formData.append('image', values.image)
+      }
+      formData.append('name', values.name)
+      formData.append('desc', values.desc)
+      formData.append('price', String(values.price))
+      formData.append('categoryId', values.categoryId)
+      console.log("FORMDATA: " + formData, "VALUES: " + values)
+      if (initialData == null) {
+        await createProduct(formData)
+      } else {
+        await updateProduct(initialData.id, formData)
+      }
     })
   }
 
@@ -63,11 +89,23 @@ export const CreateProductForm = ({
                   <Input
                     className="text-black"
                     type="file"
+                    onChange={e => {
+                      if (!e.target.files) return
+                      onChange(e.target.files[0])
+                    }}
                     {...fieldProps}
-                    multiple
                     disabled={isPending}
                   />
                 </FormControl>
+                {initialData != null &&
+                  <Image
+                    className="mx-auto"
+                    src={initialData.imagePath}
+                    width={200}
+                    height={200}
+                    alt="Product Image"
+                  />
+                }
                 <FormMessage />
               </FormItem>
             )}
