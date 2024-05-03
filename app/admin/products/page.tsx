@@ -1,8 +1,5 @@
-import { deleteProduct } from "@/actions/delete-product"
 import { Button } from "@/components/ui/button"
 import { db } from "@/lib/db"
-import { currencyFormatter } from "@/lib/utils"
-import Image from "next/image"
 import Link from "next/link"
 import ProductList from "./components/product-list"
 
@@ -25,7 +22,9 @@ const ProductsPage = async () => {
         </Button>
       </div>
       {products &&
-        <ProductList products={cleanProducts} />
+        <ul className="flex gap-8">
+          <ProductList products={cleanProducts} />
+        </ul>
       }
     </div>
   )

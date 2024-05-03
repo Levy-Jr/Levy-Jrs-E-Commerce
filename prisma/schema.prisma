@@ -80,5 +80,5 @@ model Product {
   isArchived Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  imagePath  String
+  imagePath  String[]
 }

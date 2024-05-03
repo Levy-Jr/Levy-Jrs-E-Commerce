@@ -56,13 +56,14 @@ export const ProductForm = ({
     startTransition(async () => {
       const formData = new FormData();
       if (values.image) {
-        formData.append('image', values.image)
+        for (let i = 0; i < values.image.length; i++) {
+          formData.append('image', values.image[i]);
+        }
       }
       formData.append('name', values.name)
       formData.append('desc', values.desc)
       formData.append('price', String(values.price))
       formData.append('categoryId', values.categoryId)
-      console.log("FORMDATA: " + formData, "VALUES: " + values)
       if (initialData == null) {
         await createProduct(formData)
       } else {
@@ -89,18 +90,18 @@ export const ProductForm = ({
                   <Input
                     className="text-black"
                     type="file"
-                    onChange={e => {
-                      if (!e.target.files) return
-                      onChange(e.target.files[0])
-                    }}
+                    onChange={e =>
+                      onChange([...Array.from(e.target.files ?? [])])
+                    }
                     {...fieldProps}
+                    multiple
                     disabled={isPending}
                   />
                 </FormControl>
                 {initialData != null &&
                   <Image
                     className="mx-auto"
-                    src={initialData.imagePath}
+                    src={initialData.imagePath[0]}
                     width={200}
                     height={200}
                     alt="Product Image"

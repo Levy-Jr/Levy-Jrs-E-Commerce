@@ -17,7 +17,7 @@ const ProductList = ({
   products
 }: ProductListProps) => {
   return (
-    <ul className="flex gap-8">
+    <>
       {products.map(product => (
         <li
           key={product.id}
@@ -26,14 +26,14 @@ const ProductList = ({
           <h2 className="text-center uppercase font-bold">{product.name}</h2>
           <Image
             className="mx-auto"
-            src={product.imagePath}
+            src={product.imagePath[0]}
             width={300}
             height={300}
             alt={product.name}
           />
           <p className="text-center">{product.desc}</p>
-          <p className="text-red-700 font-bold text-lg text-center">{currencyFormatter.format(Number(product.price))}</p>
-          <div className="text-end">
+          <p className="text-red-700 font-bold my-2 text-lg text-center">{currencyFormatter.format(Number(product.price))}</p>
+          <div className="text-end space-x-3">
             <Button className="bg-green-600 hover:bg-green-700" asChild>
               <Link href={`/admin/products/${product.id}`}>Editar</Link>
             </Button>
@@ -46,7 +46,7 @@ const ProductList = ({
           </div>
         </li>
       ))}
-    </ul>
+    </>
   )
 }
 
