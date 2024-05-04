@@ -14,6 +14,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import { z } from "zod"
 
 /* tirando o type de "price" no type Product e setando ele para number. Antes ele estava como "decimal" e estava dando erro */
@@ -55,6 +56,7 @@ export const ProductForm = ({
 
     startTransition(async () => {
       const formData = new FormData();
+
       if (values.image) {
         for (let i = 0; i < values.image.length; i++) {
           formData.append('image', values.image[i]);
@@ -64,10 +66,17 @@ export const ProductForm = ({
       formData.append('desc', values.desc)
       formData.append('price', String(values.price))
       formData.append('categoryId', values.categoryId)
-      if (initialData == null) {
-        await createProduct(formData)
-      } else {
-        await updateProduct(initialData.id, formData)
+
+      try {
+        if (initialData == null) {
+          await createProduct(formData)
+          toast.success("Produto criado com sucesso.")
+        } else {
+          await updateProduct(initialData.id, formData)
+          toast.success("Produto atualizado com sucesso.")
+        }
+      } catch (error) {
+        toast.error("Ops! Algo deu errado.")
       }
     })
   }
@@ -80,6 +89,7 @@ export const ProductForm = ({
       >
         <h1 className="text-center text-2xl font-bold mb-4">CADASTRO DO PRODUTO</h1>
         <div className="space-y-4">
+          {/* TODO: TRANSFORM IMAGEPATH INTO AN ARRAY OF OBJECT, WHERE IT WILL CONTAIN THE IMAGEPATH AND WHETHER IS THE DEFAULT IMAGE OF THE PRODUCT */}
           <FormField
             control={form.control}
             name="image"
@@ -99,13 +109,17 @@ export const ProductForm = ({
                   />
                 </FormControl>
                 {initialData != null &&
-                  <Image
-                    className="mx-auto"
-                    src={initialData.imagePath[0]}
-                    width={200}
-                    height={200}
-                    alt="Product Image"
-                  />
+                  <div className="flex justify-between">
+                    {initialData.imagePath.map(image => (
+                      <Image
+                        className="mx-auto"
+                        src={image}
+                        width={200}
+                        height={200}
+                        alt="Product Image"
+                      />
+                    ))}
+                  </div>
                 }
                 <FormMessage />
               </FormItem>

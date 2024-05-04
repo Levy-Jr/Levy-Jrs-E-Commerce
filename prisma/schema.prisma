@@ -80,5 +80,6 @@ model Product {
   isArchived Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  //TODO: TRANSFORM IMAGEPATH INTO AN ARRAY OF OBJECT, WHERE IT WILL CONTAIN THE IMAGEPATH AND WHETHER IS THE DEFAULT IMAGE OF THE PRODUCT
   imagePath  String[]
 }

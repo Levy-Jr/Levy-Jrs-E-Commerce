@@ -12,8 +12,9 @@ export const deleteProduct = async (id: string) => {
     }
   })
   if (product == null) return notFound()
-
-  await fs.unlink(`public/${product.imagePath}`)
+  for (let i = 0; i < product.imagePath.length; i++) {
+    await fs.unlink(`public/${product.imagePath[i]}`)
+  }
 
   revalidatePath('/')
   revalidatePath('/products')

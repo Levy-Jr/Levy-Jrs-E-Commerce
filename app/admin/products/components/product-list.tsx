@@ -6,6 +6,7 @@ import { currencyFormatter } from "@/lib/utils"
 import { Product } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
+import toast from "react-hot-toast"
 
 type CleanProduct = Omit<Product, 'price'> & { price: number }
 
@@ -16,6 +17,15 @@ type ProductListProps = {
 const ProductList = ({
   products
 }: ProductListProps) => {
+  const handleDeleteButton = async (id: string) => {
+    try {
+      await deleteProduct(id)
+      toast.success("Produto excluído com sucesso.")
+    } catch (error) {
+      toast.error("Ops! Algo deu errado!")
+    }
+  }
+
   return (
     <>
       {products.map(product => (
@@ -39,7 +49,7 @@ const ProductList = ({
             </Button>
             <Button
               className="bg-red-600 hover:bg-red-700"
-              onClick={() => deleteProduct(product.id)}
+              onClick={() => handleDeleteButton(product.id)}
             >
               Excluir
             </Button>
