@@ -80,6 +80,13 @@ model Product {
   isArchived Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  //TODO: TRANSFORM IMAGEPATH INTO AN ARRAY OF OBJECT, WHERE IT WILL CONTAIN THE IMAGEPATH AND WHETHER IS THE DEFAULT IMAGE OF THE PRODUCT
-  imagePath  String[]
+  images     Image[]
+}
+
+model Image {
+  id           String  @id @default(uuid())
+  productId    String
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  imagePath    String
+  defaultImage Boolean @default(false)
 }

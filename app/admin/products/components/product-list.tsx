@@ -3,12 +3,14 @@
 import { deleteProduct } from "@/actions/delete-product"
 import { Button } from "@/components/ui/button"
 import { currencyFormatter } from "@/lib/utils"
-import { Product } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import toast from "react-hot-toast"
 
-type CleanProduct = Omit<Product, 'price'> & { price: number }
+type CleanProduct = Omit<Prisma.ProductGetPayload<{
+  include: { images: true }
+}>, 'price'> & { price: number }
 
 type ProductListProps = {
   products: CleanProduct[]
@@ -36,7 +38,7 @@ const ProductList = ({
           <h2 className="text-center uppercase font-bold">{product.name}</h2>
           <Image
             className="mx-auto"
-            src={product.imagePath[0]}
+            src={product.images[0].imagePath}
             width={300}
             height={300}
             alt={product.name}

@@ -4,7 +4,11 @@ import Link from "next/link"
 import ProductList from "./components/product-list"
 
 const ProductsPage = async () => {
-  const products = await db.product.findMany({})
+  const products = await db.product.findMany({
+    include: {
+      images: true
+    }
+  })
 
   const cleanProducts = products.map(product => ({
     ...product,

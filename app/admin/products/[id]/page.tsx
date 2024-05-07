@@ -8,7 +8,10 @@ const UpdateProduct = async ({
   params: { id: string }
 }) => {
   const product = await db.product.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      images: true
+    }
   })
 
   const categories = await db.category.findMany({})

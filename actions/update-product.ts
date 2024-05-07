@@ -19,35 +19,38 @@ export const updateProduct = async (id: string, values: FormData) => {
   const product = await db.product.findUnique({
     where: {
       id
+    },
+    include: {
+      images: true
     }
   })
 
   if (product == null) return notFound()
 
-  let imagePath = product.imagePath
-  if (image != null && image.size > 0) {
-    await fs.unlink("public" + product.imagePath)
-    imagePath = `/products/${crypto.randomUUID()}-${image.name}`
-    await fs.writeFile(
-      `public${imagePath}`,
-      Buffer.from(await image.arrayBuffer())
-    )
+  let imagePath = product.
+    if(image != null && image.size > 0) {
+      await fs.unlink("public" + product.imagePath)
+  imagePath = `/products/${crypto.randomUUID()}-${image.name}`
+  await fs.writeFile(
+    `public${imagePath}`,
+    Buffer.from(await image.arrayBuffer())
+  )
+}
+
+await db.product.update({
+  where: {
+    id
+  },
+  data: {
+    categoryId,
+    name,
+    desc,
+    price,
+    imagePath
   }
+})
 
-  await db.product.update({
-    where: {
-      id
-    },
-    data: {
-      categoryId,
-      name,
-      desc,
-      price,
-      imagePath
-    }
-  })
-
-  revalidatePath("/")
-  revalidatePath("/admin/products")
-  redirect("/admin/products")
+revalidatePath("/")
+revalidatePath("/admin/products")
+redirect("/admin/products")
 }

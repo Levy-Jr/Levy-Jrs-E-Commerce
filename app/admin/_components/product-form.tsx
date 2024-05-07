@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { CreateProductSchema, UpdateProductSchema } from "@/schemas/productSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Category, Product } from "@prisma/client"
+import { Category, Prisma } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useTransition } from "react"
@@ -18,7 +18,11 @@ import toast from "react-hot-toast"
 import { z } from "zod"
 
 /* tirando o type de "price" no type Product e setando ele para number. Antes ele estava como "decimal" e estava dando erro */
-type CleanProduct = Omit<Product, 'price'> & { price: number }
+type CleanProduct = Omit<Prisma.ProductGetPayload<{
+  include: {
+    images: true
+  }
+}>, 'price'> & { price: number }
 
 type CreateProductFormProps = {
   categories: Category[];
@@ -110,10 +114,11 @@ export const ProductForm = ({
                 </FormControl>
                 {initialData != null &&
                   <div className="flex justify-between">
-                    {initialData.imagePath.map(image => (
+                    {initialData.images.map(image => (
                       <Image
+                        key={image.id}
                         className="mx-auto"
-                        src={image}
+                        src={image.imagePath}
                         width={200}
                         height={200}
                         alt="Product Image"

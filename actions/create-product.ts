@@ -12,6 +12,7 @@ export const createProduct = async (values: FormData) => {
   const descValue = values.get('desc')
   const priceValue = values.get('price')
   const categoryIdValue = values.get('categoryId')
+
   const cleanValues = {
     image: imageValues,
     name: nameValue,
@@ -31,12 +32,18 @@ export const createProduct = async (values: FormData) => {
   /* the recursive option creates the directory when it doesn't exist, and doesn't create anything when it already exists */
   await fs.mkdir("public/products", { recursive: true })
 
-  //TODO: TRANSFORM IMAGEPATH INTO AN ARRAY OF OBJECT, WHERE IT WILL CONTAIN THE IMAGEPATH AND WHETHER IS THE DEFAULT IMAGE OF THE PRODUCT
   let newImagePath = ""
-  const imagesPath: string[] = []
+
+  type ImagesPath = {
+    imagePath: string;
+    defaultImage?: boolean;
+  }
+  const imagesPath: ImagesPath[] = []
   for (let i = 0; i < image.length; i++) {
     newImagePath = `/products/${crypto.randomUUID()}=${image[i].name}`
-    imagesPath.push(newImagePath)
+    imagesPath.push({
+      imagePath: newImagePath
+    })
     await fs.writeFile(
       `public${newImagePath}`,
       Buffer.from(await image[i].arrayBuffer())
@@ -51,10 +58,13 @@ export const createProduct = async (values: FormData) => {
       name,
       desc,
       price,
-      imagePath: imagesPath
+      images: {
+        createMany: {
+          data: imagesPath
+        }
+      }
     }
   })
-
 
   revalidatePath("/")
   revalidatePath("/admin/products")
