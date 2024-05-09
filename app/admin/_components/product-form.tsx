@@ -1,6 +1,7 @@
 "use client"
 
 import { createProduct } from "@/actions/create-product"
+import { DefaultProductImage, DeleteProductImage } from "@/actions/product-image"
 import { updateProduct } from "@/actions/update-product"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -91,15 +92,16 @@ export const ProductForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-w-screen-sm mx-auto mt-16 bg-red-600 text-white shadow-red-950 shadow-lg p-4 py-8 rounded-md"
       >
-        <h1 className="text-center text-2xl font-bold mb-4">CADASTRO DO PRODUTO</h1>
+        <h1 className="text-center text-2xl font-bold mb-4">
+          {initialData ? "EDIÇÃO DO PRODUTO" : "CADASTRO DO PRODUTO"}
+        </h1>
         <div className="space-y-4">
-          {/* TODO: TRANSFORM IMAGEPATH INTO AN ARRAY OF OBJECT, WHERE IT WILL CONTAIN THE IMAGEPATH AND WHETHER IS THE DEFAULT IMAGE OF THE PRODUCT */}
           <FormField
             control={form.control}
             name="image"
             render={({ field: { value, onChange, ...fieldProps } }) => (
               <FormItem>
-                <FormLabel>Imagens do produto: </FormLabel>
+                <FormLabel>Adicionar imagem: </FormLabel>
                 <FormControl>
                   <Input
                     className="text-black"
@@ -114,16 +116,61 @@ export const ProductForm = ({
                 </FormControl>
                 {initialData != null &&
                   <div className="flex justify-between">
-                    {initialData.images.map(image => (
-                      <Image
-                        key={image.id}
-                        className="mx-auto"
-                        src={image.imagePath}
-                        width={200}
-                        height={200}
-                        alt="Product Image"
-                      />
-                    ))}
+                    {initialData.images.map((image, index) => {
+                      if (image.defaultImage) {
+                        return <div
+                          key={index}
+                          className="flex flex-col"
+                        >
+                          <Image
+                            className="mx-auto"
+                            src={image.imagePath}
+                            width={200}
+                            height={200}
+                            alt="Product Image"
+                          />
+                          <div>
+                            <Button
+                              onClick={() => DeleteProductImage(initialData.id, image.id)}
+                              variant="destructive"
+                              type="button"
+                            >Excluir</Button>
+                          </div>
+                        </div>
+                      } else {
+                        return <div
+                          key={index}
+                          className="flex flex-col"
+                        >
+                          <Image
+                            className="mx-auto"
+                            src={image.imagePath}
+                            width={200}
+                            height={200}
+                            alt="Product Image"
+                          />
+                          <div>
+                            <Button
+                              onClick={() => {
+                                startTransition(() => {
+                                  DeleteProductImage(initialData.id, image.id)
+                                })
+                              }}
+                              variant="destructive"
+                              type="button"
+                            >Excluir</Button>
+                            <Button
+                              onClick={() => {
+                                startTransition(() => {
+                                  DefaultProductImage(initialData.id, image.id, initialData.images)
+                                })
+                              }}
+                              type="button"
+                            >Imagem padrão</Button>
+                          </div>
+                        </div>
+                      }
+                    })}
                   </div>
                 }
                 <FormMessage />

@@ -27,7 +27,6 @@ const UpdateProduct = async ({
   return (
     <>
       <div>
-        <h1 className="text-4xl font-bold tracking-wider text-center">EDITAR PRODUTO</h1>
         <ProductForm
           categories={categories}
           initialData={cleanProduct}

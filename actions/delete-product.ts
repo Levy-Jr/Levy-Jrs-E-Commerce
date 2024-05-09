@@ -9,11 +9,15 @@ export const deleteProduct = async (id: string) => {
   const product = await db.product.delete({
     where: {
       id
+    },
+    include: {
+      images: true
     }
   })
+
   if (product == null) return notFound()
-  for (let i = 0; i < product.imagePath.length; i++) {
-    await fs.unlink(`public/${product.imagePath[i]}`)
+  for (let i = 0; i < product.images.length; i++) {
+    await fs.unlink(`public/${product.images[i]}`)
   }
 
   revalidatePath('/')

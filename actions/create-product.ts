@@ -50,7 +50,9 @@ export const createProduct = async (values: FormData) => {
     )
   }
 
-  console.log(imagesPath)
+  if (imagesPath.length > 0) {
+    imagesPath[0].defaultImage = true
+  }
 
   await db.product.create({
     data: {

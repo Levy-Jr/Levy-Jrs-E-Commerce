@@ -38,7 +38,7 @@ const ProductList = ({
           <h2 className="text-center uppercase font-bold">{product.name}</h2>
           <Image
             className="mx-auto"
-            src={product.images[0].imagePath}
+            src={product.images.filter(img => img.defaultImage)[0].imagePath}
             width={300}
             height={300}
             alt={product.name}
