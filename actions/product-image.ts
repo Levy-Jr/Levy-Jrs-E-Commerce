@@ -37,7 +37,6 @@ export const DefaultProductImage = async (productId: string, imageId: string, pr
 
     revalidatePath("/admin/products" + productId)
   } catch (error) {
-    console.log(error)
   }
 }
 

@@ -4,13 +4,15 @@ import { createProduct } from "@/actions/create-product"
 import { DefaultProductImage, DeleteProductImage } from "@/actions/product-image"
 import { updateProduct } from "@/actions/update-product"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { CreateProductSchema, UpdateProductSchema } from "@/schemas/productSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Category, Prisma } from "@prisma/client"
+import { Check, TrashIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useTransition } from "react"
@@ -46,7 +48,9 @@ export const ProductForm = ({
       name: initialData.name,
       desc: initialData.desc,
       price: Number(String(initialData.price)),
-      categoryId: initialData.categoryId
+      categoryId: initialData.categoryId,
+      isArchived: initialData.isArchived,
+      isFeatured: initialData.isFeatured,
     } : {
       name: "",
       desc: "",
@@ -71,6 +75,8 @@ export const ProductForm = ({
       formData.append('desc', values.desc)
       formData.append('price', String(values.price))
       formData.append('categoryId', values.categoryId)
+      formData.append('isArchived', JSON.stringify(values.isArchived))
+      formData.append('isFeatured', JSON.stringify(values.isFeatured))
 
       try {
         if (initialData == null) {
@@ -115,60 +121,64 @@ export const ProductForm = ({
                   />
                 </FormControl>
                 {initialData != null &&
-                  <div className="flex justify-between">
+                  <div className="grid grid-cols-3 gap-4">
                     {initialData.images.map((image, index) => {
                       if (image.defaultImage) {
-                        return <div
-                          key={index}
-                          className="flex flex-col"
-                        >
-                          <Image
-                            className="mx-auto"
-                            src={image.imagePath}
-                            width={200}
-                            height={200}
-                            alt="Product Image"
-                          />
-                          <div>
-                            <Button
-                              onClick={() => DeleteProductImage(initialData.id, image.id)}
-                              variant="destructive"
-                              type="button"
-                            >Excluir</Button>
+                        return (
+                          <div key={index} className="flex flex-col">
+                            <div className="relative aspect-square">
+                              <Image
+                                src={image.imagePath}
+                                fill
+                                alt="Product Image" />
+                            </div>
+                            <div className="flex justify-end">
+                              <Button
+                                disabled={isPending}
+                                onClick={() => DeleteProductImage(initialData.id, image.id)}
+                                variant="destructive"
+                                type="button">
+                                <TrashIcon className="w-[1rem]" />
+                              </Button>
+                            </div>
                           </div>
-                        </div>
+                        )
                       } else {
-                        return <div
-                          key={index}
-                          className="flex flex-col"
-                        >
-                          <Image
-                            className="mx-auto"
-                            src={image.imagePath}
-                            width={200}
-                            height={200}
-                            alt="Product Image"
-                          />
-                          <div>
-                            <Button
-                              onClick={() => {
-                                startTransition(() => {
-                                  DeleteProductImage(initialData.id, image.id)
-                                })
-                              }}
-                              variant="destructive"
-                              type="button"
-                            >Excluir</Button>
-                            <Button
-                              onClick={() => {
-                                startTransition(() => {
-                                  DefaultProductImage(initialData.id, image.id, initialData.images)
-                                })
-                              }}
-                              type="button"
-                            >Imagem padrão</Button>
-                          </div>
-                        </div>
+                        return (
+                          <div
+                            key={index}
+                            className="flex flex-col">
+                            <div className="relative aspect-square">
+                              <Image
+                                src={image.imagePath}
+                                fill
+                                alt="Product Image" />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                disabled={isPending}
+                                onClick={() => {
+                                  startTransition(() => {
+                                    DefaultProductImage(initialData.id, image.id, initialData.images)
+                                  })
+                                }}
+                                type="button"
+                                className="bg-green-500 hover:bg-green-600"
+                              ><Check className="w-[1rem]" /></Button>
+                              <Button
+                                disabled={isPending}
+                                onClick={() => {
+                                  startTransition(() => {
+                                    DeleteProductImage(initialData.id, image.id)
+                                  })
+                                }}
+                                variant="destructive"
+                                type="button"
+                              >
+                                <TrashIcon className="w-[1rem]" />
+                              </Button>
+                            </div>
+                          </div>)
                       }
                     })}
                   </div>
@@ -239,7 +249,7 @@ export const ProductForm = ({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="text-black">
+                    <SelectTrigger className="text-black" disabled={isPending}>
                       <SelectValue placeholder="Selecione uma categoria" />
                     </SelectTrigger>
                   </FormControl>
@@ -260,6 +270,56 @@ export const ProductForm = ({
               </FormItem>
             )}
           />
+          {initialData != null &&
+            <>
+              <FormField
+                control={form.control}
+                name="isArchived"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="text-white">
+                        Arquivado
+                      </FormLabel>
+                      <FormDescription className="text-white">
+                        Esse produto não vai aparecer em nenhum lugar da loja.
+                      </FormDescription>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="text-white">
+                        Destaque
+                      </FormLabel>
+                      <FormDescription className="text-white">
+                        Esse produto  vai aparecer na página principal da loja.
+                      </FormDescription>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          }
         </div>
         <div className="flex justify-end gap-4 mt-5">
           <Button className="bg-transparent hover:bg-red-700" asChild>

@@ -10,11 +10,6 @@ const ContactPage = () => {
           desc="Para questões gerais, feedback ou parcerias, acesse:"
           href="/contact/general"
         />
-        <ContactCard
-          title="SUPORTE E GARANTIA"
-          desc="Para assistência ou informações sobre garantia acesse:"
-          href="/contact/support"
-        />
       </div>
     </div>
   )

@@ -1,14 +1,15 @@
 import { currentUser } from "@/lib/auth"
-import { LogoutButton } from "./components/logout-button"
+import { MyAccountForm } from "./components/my-account-form"
 
 const MyAccountPage = async () => {
   const user = await currentUser()
 
+  console.log(user?.email)
+
   return (
-    <div>
-      <span>Usuário: {user?.fullName}</span>
-      <br />
-      <LogoutButton>Sair</LogoutButton>
+    <div className="p-8">
+      <h1 className="text-center text-3xl uppercase tracking-wide font-bold my-8">Minha Conta</h1>
+      <MyAccountForm user={user} />
     </div>
   )
 }

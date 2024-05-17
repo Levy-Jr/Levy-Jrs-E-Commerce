@@ -14,9 +14,9 @@ const Navbar = () => {
       active: pathname === '/'
     },
     {
-      href: "/store",
+      href: "/products",
       label: "Loja",
-      active: pathname === "/store"
+      active: pathname === "/products"
     },
     {
       href: "/contact",

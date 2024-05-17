@@ -26,7 +26,7 @@ const ProductsPage = async () => {
         </Button>
       </div>
       {products &&
-        <ul className="flex gap-8">
+        <ul className="grid grid-cols-2 md:grid-cols-3 gap-8">
           <ProductList products={cleanProducts} />
         </ul>
       }

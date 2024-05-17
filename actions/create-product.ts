@@ -23,7 +23,6 @@ export const createProduct = async (values: FormData) => {
 
   const validatedFields = CreateProductSchema.safeParse(cleanValues)
   if (!validatedFields.success) {
-    console.log(validatedFields.error.formErrors.fieldErrors)
     return validatedFields.error.formErrors.fieldErrors
   }
 

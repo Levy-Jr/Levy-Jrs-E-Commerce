@@ -12,23 +12,36 @@ export const updateProduct = async (id: string, values: FormData) => {
   const descValue = values.get('desc')
   const priceValue = values.get('price')
   const categoryIdValue = values.get('categoryId')
+  let isArchivedValue = values.get('isArchived')
+  let isFeaturedValue = values.get('isFeatured')
 
-  const cleanValues = {
+  type CleanValues = {
+    image: FormDataEntryValue[]
+    name: FormDataEntryValue | null
+    desc: FormDataEntryValue | null
+    price: FormDataEntryValue | null
+    categoryId: FormDataEntryValue | null
+    isArchived: boolean
+    isFeatured: boolean
+  }
+
+  const cleanValues: CleanValues = {
     image: imageValues,
     name: nameValue,
     desc: descValue,
     price: priceValue,
-    categoryId: categoryIdValue
+    categoryId: categoryIdValue,
+    isArchived: !!JSON.parse(String(isArchivedValue)),
+    isFeatured: !!JSON.parse(String(isFeaturedValue))
   }
 
   const validatedFields = UpdateProductSchema.safeParse(cleanValues)
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.formErrors.fieldErrors)
     return validatedFields.error.formErrors.fieldErrors
   }
 
-  const { categoryId, name, desc, price, image } = validatedFields.data
+  const { categoryId, name, desc, price, image, isArchived, isFeatured } = validatedFields.data
 
   const product = await db.product.findUnique({
     where: {
@@ -73,6 +86,8 @@ export const updateProduct = async (id: string, values: FormData) => {
       name,
       desc,
       price,
+      isArchived,
+      isFeatured,
       images: {
         createMany: {
           data: imagesPath

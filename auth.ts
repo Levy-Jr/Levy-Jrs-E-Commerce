@@ -43,6 +43,7 @@ export const {
       if (!existingUser) return token;
 
       token.fullName = existingUser.fullName
+      token.email = existingUser.email
       token.phoneNumber = existingUser.phoneNumber
       token.role = existingUser.role
       token.cpf = existingUser.cpf
