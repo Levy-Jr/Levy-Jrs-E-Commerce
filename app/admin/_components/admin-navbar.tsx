@@ -17,6 +17,11 @@ const AdminNavbar = () => {
       href: "/admin/products",
       label: "Produtos",
       active: pathname === "/admin/products"
+    },
+    {
+      href: "/admin/orders",
+      label: "Encomendas",
+      active: pathname === "/admin/orders"
     }
   ]
 

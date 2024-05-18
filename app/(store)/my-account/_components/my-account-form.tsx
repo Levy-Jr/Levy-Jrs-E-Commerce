@@ -55,7 +55,7 @@ export const MyAccountForm = ({ user }: MyAccountFormProps) => {
   return (
     <Form {...form}>
       <form
-        className="space-y-6 max-w-screen-md mx-auto"
+        className="space-y-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField

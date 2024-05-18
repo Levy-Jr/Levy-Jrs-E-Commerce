@@ -2,8 +2,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import authConfig from "@/auth.config"
 import NextAuth from "next-auth"
 import { db } from "./lib/db"
-import { UserRole } from "@prisma/client"
-import { getUserById } from "@/data/user"
+import { Prisma, UserRole } from "@prisma/client"
+import { getOrderByUserId, getUserById } from "@/data/user"
 
 export const {
   handlers: { GET, POST },
@@ -26,6 +26,19 @@ export const {
         session.user.phoneNumber = token.phoneNumber as string;
         session.user.role = token.role as UserRole;
         session.user.cpf = token.cpf as string;
+        session.user.orders = token.orders as Prisma.OrderGetPayload<{
+          select: {
+            id: true,
+            pricePaid: true,
+            product: {
+              select: {
+                name: true
+              }
+            },
+            user: true,
+            createdAt: true
+          },
+        }>[]
       }
 
       if (session.user) {
@@ -47,6 +60,11 @@ export const {
       token.phoneNumber = existingUser.phoneNumber
       token.role = existingUser.role
       token.cpf = existingUser.cpf
+
+      const existingUserOrders = await getOrderByUserId(existingUser.id)
+      if (!existingUserOrders) return token
+
+      token.orders = existingUserOrders
 
       return token
     },
