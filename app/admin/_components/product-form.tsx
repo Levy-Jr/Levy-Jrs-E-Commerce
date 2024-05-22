@@ -281,6 +281,7 @@ export const ProductForm = ({
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={isPending}
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
@@ -304,6 +305,7 @@ export const ProductForm = ({
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={isPending}
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">

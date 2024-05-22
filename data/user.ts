@@ -32,10 +32,15 @@ export const getOrderByUserId = async (userId: string) => {
       },
       select: {
         id: true,
-        pricePaid: true,
-        product: {
+        orderItems: {
           select: {
-            name: true
+            id: true,
+            product: {
+              select: {
+                name: true
+              }
+            },
+            pricePaid: true
           }
         },
         user: true

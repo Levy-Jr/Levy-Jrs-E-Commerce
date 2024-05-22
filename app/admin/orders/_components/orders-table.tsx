@@ -4,15 +4,15 @@ import { db } from "@/lib/db"
 import { currencyFormatter } from "@/lib/utils"
 import { MoreVertical } from "lucide-react"
 import { DeleteDropDownItem } from "./order-action"
+import { Fragment } from "react"
 
 export const OrdersTable = async () => {
   const orders = await db.order.findMany({
     select: {
       id: true,
-      pricePaid: true,
-      product: {
+      orderItems: {
         select: {
-          name: true
+          product: true
         }
       },
       user: {
@@ -44,22 +44,26 @@ export const OrdersTable = async () => {
       <TableBody>
         {orders.map(order => (
           <TableRow key={order.id}>
-            <TableCell>{order.product.name}</TableCell>
-            <TableCell>{order.user.email}</TableCell>
-            <TableCell>{currencyFormatter.format(Number(order.pricePaid) / 100)}</TableCell>
-            <TableCell className="text-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <MoreVertical />
-                  <span className="sr-only">Ações</span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DeleteDropDownItem
-                    id={order.id}
-                  />
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+            {order.orderItems.map((orderItem, index) => (
+              <Fragment key={index}>
+                <TableCell>{orderItem.product.name}</TableCell>
+                <TableCell>{order.user.email}</TableCell>
+                <TableCell>{currencyFormatter.format(Number(orderItem.product.price) / 100)}</TableCell>
+                <TableCell className="text-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <MoreVertical />
+                      <span className="sr-only">Ações</span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DeleteDropDownItem
+                        id={orderItem.product.id}
+                      />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </Fragment>
+            ))}
           </TableRow>
         ))}
       </TableBody>

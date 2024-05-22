@@ -27,6 +27,11 @@ const Navbar = () => {
       href: "/my-account",
       label: "Minha conta",
       active: pathname === "/my-account"
+    },
+    {
+      href: "/cart",
+      label: "Carrinho",
+      active: pathname === "/cart"
     }
   ]
   return (

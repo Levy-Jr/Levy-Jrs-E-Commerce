@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Stripe from "stripe"
-import { CheckoutForm } from "./_components/CheckoutForm"
+import { CheckoutForm } from "./_components/checkout-form"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
@@ -19,7 +19,7 @@ const PurchasePage = async ({
 
   if (product == null) return notFound()
 
-  const cleanProducts = {
+  const cleanProduct = {
     ...product,
     price: product.price.toNumber()
   }
@@ -27,7 +27,10 @@ const PurchasePage = async ({
   const paymentIntent = await stripe.paymentIntents.create({
     amount: (Number(product.price) * 100),
     currency: "BRL",
-    metadata: { productId: product.id }
+    metadata: {
+      session: 'single_product_session',
+      productId: product.id
+    }
   })
 
   if (paymentIntent.client_secret == null) {
@@ -35,7 +38,7 @@ const PurchasePage = async ({
   }
 
   return (
-    <CheckoutForm product={cleanProducts} clientSecret={paymentIntent.client_secret} />
+    <CheckoutForm product={cleanProduct} clientSecret={paymentIntent.client_secret} />
   )
 }
 

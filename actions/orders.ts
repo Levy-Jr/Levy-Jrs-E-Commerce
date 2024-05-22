@@ -7,10 +7,10 @@ export const userOrderExists = async (email: string, productId: string) => {
   return (await db.order.findFirst({
     where: {
       user: { email },
-      productId
     },
     select: {
-      id: true
+      id: true,
+      orderItems: true
     }
   })) != null
 }
@@ -19,12 +19,15 @@ export const deleteOrder = async (id: string) => {
   const order = await db.order.delete({
     where: {
       id
+    },
+    include: {
+      orderItems: true
     }
   })
 
   const cleanOrder = {
     ...order,
-    pricePaid: order.pricePaid.toNumber()
+    pricePaid: order.orderItems.map(i => Number(i.pricePaid))
   }
 
   if (order == null) return notFound()
