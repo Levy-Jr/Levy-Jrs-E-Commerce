@@ -10,6 +10,7 @@ export const OrdersTable = async () => {
   const orders = await db.order.findMany({
     select: {
       id: true,
+      isPaid: true,
       orderItems: {
         select: {
           product: true
@@ -35,7 +36,8 @@ export const OrdersTable = async () => {
         <TableRow>
           <TableHead>Produto</TableHead>
           <TableHead>Cliente</TableHead>
-          <TableHead>Preço Pagado</TableHead>
+          <TableHead>Pago</TableHead>
+          <TableHead>Preço</TableHead>
           <TableHead className="w-0">
             <span className="sr-only">Ações</span>
           </TableHead>
@@ -43,12 +45,13 @@ export const OrdersTable = async () => {
       </TableHeader>
       <TableBody>
         {orders.map(order => (
-          <TableRow key={order.id}>
-            {order.orderItems.map((orderItem, index) => (
+          order.orderItems.map((orderItem, index) => (
+            <TableRow key={order.id}>
               <Fragment key={index}>
                 <TableCell>{orderItem.product.name}</TableCell>
                 <TableCell>{order.user.email}</TableCell>
-                <TableCell>{currencyFormatter.format(Number(orderItem.product.price) / 100)}</TableCell>
+                <TableCell>{order.isPaid ? "Sim" : "Não"}</TableCell>
+                <TableCell>{currencyFormatter.format(Number(orderItem.product.price))}</TableCell>
                 <TableCell className="text-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -63,8 +66,8 @@ export const OrdersTable = async () => {
                   </DropdownMenu>
                 </TableCell>
               </Fragment>
-            ))}
-          </TableRow>
+            </TableRow>
+          ))
         ))}
       </TableBody>
     </Table>

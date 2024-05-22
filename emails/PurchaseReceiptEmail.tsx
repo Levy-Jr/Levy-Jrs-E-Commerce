@@ -1,15 +1,15 @@
-import { Order, Product } from "@prisma/client"
-import { Html, Tailwind, Head, Body, Container, Text, Preview, Hr, Heading, Img } from "@react-email/components"
+import { OrderItem, Product } from "@prisma/client"
+import { Html, Tailwind, Head, Body, Container, Text, Preview, Hr, Heading } from "@react-email/components"
 
-type CleanOrder = Omit<Order, 'pricePaid'> & { pricePaid: number }
 type CleanProduct = Omit<Product, 'price'> & { price: number }
+type CleanOrderItem = Omit<OrderItem, 'pricePaid'> & { pricePaid: number }
 
 type PurchaseReceiptEmailProps = {
-  order: CleanOrder;
+  orderItem: CleanOrderItem;
   product: CleanProduct;
 }
 
-const PurchaseReceiptEmail = ({ order, product }: PurchaseReceiptEmailProps) => {
+const PurchaseReceiptEmail = ({ orderItem, product }: PurchaseReceiptEmailProps) => {
   return (
     <Html>
       <Preview>Parabéns pela compra do produto {product.name}!</Preview>
@@ -40,12 +40,11 @@ PurchaseReceiptEmail.PreviewProps = {
     createdAt: new Date(),
     updatedAt: new Date()
   },
-  order: {
+  orderItem: {
     id: crypto.randomUUID(),
-    userId: crypto.randomUUID(),
+    orderId: crypto.randomUUID(),
+    productId: crypto.randomUUID(),
     pricePaid: 5226,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   }
 } satisfies PurchaseReceiptEmailProps
 
