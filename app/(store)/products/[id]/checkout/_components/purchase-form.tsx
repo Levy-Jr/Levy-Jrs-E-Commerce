@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { currencyFormatter } from "@/lib/utils"
-import { LinkAuthenticationElement, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
+import { AddressElement, LinkAuthenticationElement, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { FormEvent, useState } from "react"
 
 export const PurchaseForm = ({ price }: { price: number }) => {
@@ -48,6 +48,10 @@ export const PurchaseForm = ({ price }: { price: number }) => {
             <LinkAuthenticationElement
               onChange={e => setEmail(e.value.email)}
             />
+            <AddressElement options={{
+              allowedCountries: ["BR"],
+              mode: "shipping"
+            }} />
           </div>
         </CardContent>
         <CardFooter>

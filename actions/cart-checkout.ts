@@ -57,18 +57,17 @@ export const cartCheckout = async (productIds: string[]) => {
     }
   })
 
-  console.log(order.id)
-
-  const session = await stripe.checkout.sessions.create({
+  const stripeSession = await stripe.checkout.sessions.create({
     line_items,
     mode: "payment",
-    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart/cart-success`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?success=1`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?canceled=1`,
+    shipping_address_collection: { allowed_countries: ["BR"] },
     metadata: {
       session: 'cart_checkout_session',
       orderId: order.id
     }
   })
 
-  return { url: session.url }
+  return { url: stripeSession.url }
 }

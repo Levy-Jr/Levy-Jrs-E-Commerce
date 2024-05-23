@@ -1,15 +1,32 @@
-import { Order, Product } from "@prisma/client"
-import { Html, Tailwind, Head, Body, Container, Text, Preview, Hr, Heading, Img } from "@react-email/components"
+import { currencyFormatter } from "@/lib/utils"
+import { Prisma } from "@prisma/client"
+import { Html, Tailwind, Head, Body, Container, Text, Preview, Section, Row, Column, Img } from "@react-email/components"
 
-type CleanOrder = Omit<Order, 'pricePaid'> & { pricePaid: number }
-type CleanProduct = Omit<Product, 'price'> & { price: number }
+type CleanProduct = Omit<Prisma.ProductGetPayload<{
+  include: {
+    images: true
+  }
+}>, 'price'> & { price: number }
+type CleanOrderItem = Omit<Prisma.OrderItemGetPayload<{
+  include: {
+    order: {
+      select: {
+        createdAt: true
+      }
+    }
+  }
+}>, 'pricePaid'> & { pricePaid: number }
 
 type PurchaseReceiptEmailProps = {
-  order: CleanOrder;
+  orderItem: CleanOrderItem;
   product: CleanProduct;
 }
 
-const PurchaseReceiptEmail = ({ order, product }: PurchaseReceiptEmailProps) => {
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" })
+
+const PurchaseReceiptEmail = ({ orderItem, product }: PurchaseReceiptEmailProps) => {
+  const defaultProductImage = product.images.filter(img => img.defaultImage)[0].imagePath
+
   return (
     <Html>
       <Preview>Parabéns pela compra do produto {product.name}!</Preview>
@@ -17,36 +34,44 @@ const PurchaseReceiptEmail = ({ order, product }: PurchaseReceiptEmailProps) => 
         <Head />
         <Body className="font-sans bg-white">
           <Container className="max-w-xl">
-            <Heading>Enviaremos um email quando o produto for enviado</Heading>
-            <Text className="text-2xl mb-0 uppercase text-center whitespace-nowrap text-wrap">{product.name}</Text>
-            <Text className="text-lg mt-0 text-center whitespace-nowrap text-wrap">{product.desc}</Text>
-            <Hr />
+            <Section>
+              <Row>
+                <Column>
+                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">ID do Pedido</Text>
+                  <Text className="mt-0 mr-4">{orderItem.orderId}</Text>
+                </Column>
+                <Column>
+                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">Preço Pago</Text>
+                  <Text className="mt-0 mr-4">{currencyFormatter.format(product.price)}</Text>
+                </Column>
+                <Column>
+                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">Comprado Em</Text>
+                  <Text className="mt-0 mr-4">{dateFormatter.format(orderItem.order.createdAt)}</Text>
+                </Column>
+              </Row>
+            </Section>
+            <Section className="border border-solid border-gray-500 rounded-lg p-4 md:p-6 my-4">
+              <Img
+                width="100%"
+                alt={product.name}
+                src={`${process.env.NEXT_PUBLIC_SERVER_URL}${defaultProductImage}`}
+              />
+              <Row className="mt-8">
+                <Column>
+                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">Nome do Produto</Text>
+                  <Text className="mt-0 mr-4">{product.name}</Text>
+                </Column>
+                <Column>
+                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">Descrição do Produto</Text>
+                  <Text className="mt-0 mr-4">{product.desc}</Text>
+                </Column>
+              </Row>
+            </Section>
           </Container>
         </Body>
       </Tailwind>
     </Html>
   )
 }
-
-PurchaseReceiptEmail.PreviewProps = {
-  product: {
-    id: crypto.randomUUID(),
-    categoryId: crypto.randomUUID(),
-    name: "Nome do produto",
-    desc: "Descrição do produto balblabla",
-    price: 5226,
-    isFeatured: false,
-    isArchived: false,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  order: {
-    id: crypto.randomUUID(),
-    userId: crypto.randomUUID(),
-    pricePaid: 5226,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }
-} satisfies PurchaseReceiptEmailProps
 
 export default PurchaseReceiptEmail

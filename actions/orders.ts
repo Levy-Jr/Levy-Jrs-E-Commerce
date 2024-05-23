@@ -16,21 +16,18 @@ export const userOrderExists = async (email: string, productId: string) => {
 }
 
 export const deleteOrder = async (id: string) => {
-  const order = await db.order.delete({
+  const orderItem = await db.orderItem.delete({
     where: {
       id
-    },
-    include: {
-      orderItems: true
     }
   })
 
   const cleanOrder = {
-    ...order,
-    pricePaid: order.orderItems.map(i => Number(i.pricePaid))
+    ...orderItem,
+    pricePaid: orderItem.pricePaid.toNumber()
   }
 
-  if (order == null) return notFound()
+  if (orderItem == null) return notFound()
 
   return cleanOrder
 }

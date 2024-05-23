@@ -15,6 +15,8 @@ const Summary = () => {
   const items = useCart(state => state.items)
   const removeAll = useCart(state => state.removeAll)
 
+  if (items.length === 0) return null
+
   const totalPrice = items.reduce((total, item) => {
     return total + Number(item.price)
   }, 0)
@@ -32,6 +34,7 @@ const Summary = () => {
       }
     })
   }
+
 
   return (
     <div className="max-w-[20rem] ml-auto mt-12 border border-gray-400 rounded-lg p-4 space-y-3">

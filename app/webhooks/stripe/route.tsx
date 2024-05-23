@@ -1,3 +1,4 @@
+import CheckoutPurchaseReceiptEmail from "@/emails/CheckoutPurchaseReceiptEmail";
 import PurchaseReceiptEmail from "@/emails/PurchaseReceiptEmail";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,60 +29,68 @@ export async function POST(req: NextRequest) {
             orderId: null
           }
 
-          console.log("CHECKOUT SESSION COMPLETED ORDER ID: ", orderId)
-
           if (!orderId) {
             throw new Error("Invalid request metadata")
           }
 
-          const order = await db.order.findUnique({
+          const shippingCheckoutAddress = metadataSession.shipping_details!.address
+
+          const order = await db.order.update({
             where: {
               id: orderId
             },
-            include: {
-              orderItems: true
-            }
-          })
-
-          /* TODO: SWITCH CASE CHECANDO OS METADADOS E GG */
-
-          if (order == null) throw new Error("Bad request")
-
-          const productIds = order.orderItems.map(orderItem => orderItem.productId)
-
-          const products = await db.product.findMany({
-            where: {
-              id: {
-                in: [...productIds]
+            data: {
+              isPaid: true,
+              ShippingAddress: {
+                create: {
+                  name: metadataSession.customer_details!.name!,
+                  city: shippingCheckoutAddress!.city!,
+                  country: shippingCheckoutAddress!.country!,
+                  postalCode: shippingCheckoutAddress!.postal_code!,
+                  street: shippingCheckoutAddress!.line1!,
+                  state: shippingCheckoutAddress!.state!,
+                }
               }
             },
             include: {
-              images: true
+              orderItems: {
+                include: {
+                  order: true,
+                  product: {
+                    include: {
+                      images: true
+                    }
+                  }
+                }
+              }
             }
           })
 
-          if (products == null) {
-            return new NextResponse("Bad request", { status: 400 })
-          }
+          if (order == null) throw new Error("Bad request")
 
-          const cleanProducts = products.map(cleanProduct => ({
-            ...cleanProduct,
-            price: Number(cleanProduct.price)
+          const cleanOrderItems = order.orderItems.map(orderItem => ({
+            ...orderItem,
+            pricePaid: Number(orderItem.pricePaid)
           }))
 
-          console.log("TUDO CERTO")
+          await resend.emails.send({
+            from: `Support <${process.env.SENDER_EMAIL}>`,
+            to: metadataSession.customer_details.email,
+            subject: "Obrigado pelo seu pedido!",
+            react: (<CheckoutPurchaseReceiptEmail
+              orderItems={cleanOrderItems}
+            />)
+          })
+
           new NextResponse()
         }
         break;
       case 'single_product_session':
         if (event.type === 'charge.succeeded') {
           const charge = event.data.object as Stripe.Charge
-
           const productId = charge.metadata.productId
-
           const email = charge.billing_details.email
-
-          console.log("EMAILLL: ", email)
+          const pricePaid = (charge.amount / 100)
 
           const product = await db.product.findUnique({
             where: {
@@ -92,20 +101,74 @@ export async function POST(req: NextRequest) {
             }
           })
 
+          const shippingAddress = charge.shipping!.address
+
           if (product == null || email == null) {
             return new NextResponse("Bad request", { status: 400 })
           }
-          /* await resend.emails.send({
+
+          const { orders: [order] } = await db.user.update({
+            where: {
+              email
+            },
+            data: {
+              orders: {
+                create: {
+                  ShippingAddress: {
+                    create: {
+                      name: charge.billing_details.name!,
+                      city: shippingAddress!.city!,
+                      country: shippingAddress!.country!,
+                      postalCode: shippingAddress!.postal_code!,
+                      street: shippingAddress!.line1!,
+                      state: shippingAddress!.state!,
+                    }
+                  },
+                  orderItems: {
+                    create: {
+                      productId,
+                      pricePaid,
+                    }
+                  }
+                }
+              }
+            },
+            select: {
+              orders: {
+                select: {
+                  createdAt: true,
+                  orderItems: {
+                    include: {
+                      order: true
+                    }
+                  }
+                },
+                take: 1
+              }
+            }
+          })
+
+          const cleanProduct = {
+            ...product,
+            price: product.price.toNumber()
+          }
+
+          const cleanOrderItem = order.orderItems.map(orderItem => ({
+            ...orderItem,
+            pricePaid: orderItem.pricePaid.toNumber()
+          }))[0]
+
+          if (!cleanOrderItem.orderId) throw new Error("Bad request")
+
+          await resend.emails.send({
             from: `Support <${process.env.SENDER_EMAIL}>`,
             to: email,
             subject: "Obrigado pelo seu pedido!",
             react: (<PurchaseReceiptEmail
-              order={cleanOrder}
-              product={cleanProducts}
+              orderItem={cleanOrderItem}
+              product={cleanProduct}
             />)
-          }) */
-
-          console.log("DEU CERTOOO")
+          })
           break;
         }
       default:

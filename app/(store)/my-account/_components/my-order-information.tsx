@@ -12,9 +12,6 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" })
 export const OrderInformation = ({ orders }: OrderInformationProps) => {
   if (orders.length === 0) return <p>Nenhuma encomenda encontrada.</p>
 
-  console.log("ORDERS: ", orders)
-  orders.map(order => console.log(order.orderItems))
-
   return (
     <Table>
       <TableHeader>
@@ -26,15 +23,15 @@ export const OrderInformation = ({ orders }: OrderInformationProps) => {
       </TableHeader>
       <TableBody>
         {orders.map(order => (
-          <TableRow key={order.id}>
-            {order.orderItems.map((orderItem, index) => (
+          order.orderItems.map((orderItem, index) => (
+            <TableRow key={order.id}>
               <Fragment key={index}>
                 <TableCell>{orderItem.product.name}</TableCell>
-                <TableCell>{currencyFormatter.format(Number(orderItem.pricePaid) / 100)}</TableCell>
+                <TableCell>{currencyFormatter.format(Number(orderItem.pricePaid))}</TableCell>
                 <TableCell>{dateFormatter.format(order.createdAt)}</TableCell>
               </Fragment>
-            ))}
-          </TableRow>
+            </TableRow>
+          ))
         ))}
       </TableBody>
     </Table>

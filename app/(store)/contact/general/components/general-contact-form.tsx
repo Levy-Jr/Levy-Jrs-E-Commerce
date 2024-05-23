@@ -10,6 +10,7 @@ import { GeneralContactSchema } from "@/schemas/contactSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTransition } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import { z } from "zod"
 
 type GeneralContactFormValues = z.infer<typeof GeneralContactSchema>
@@ -32,6 +33,7 @@ export const GeneralContactForm = () => {
     startTransition(async () => {
       try {
         await contactEmail(values)
+        toast.success("Email enviado!")
       } catch (error) {
         console.log(error)
       }
