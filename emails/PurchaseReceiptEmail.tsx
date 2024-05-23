@@ -73,5 +73,4 @@ const PurchaseReceiptEmail = ({ orderItem, product }: PurchaseReceiptEmailProps)
     </Html>
   )
 }
-
 export default PurchaseReceiptEmail
