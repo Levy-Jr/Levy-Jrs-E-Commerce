@@ -35,15 +35,13 @@ const RegisterForm = () => {
     setError("")
     setSuccess("")
 
-    console.log(values.cpf)
-
-    /*     startTransition(() => {
-          register(values)
-            .then(data => {
-              setError(data.error)
-              setSuccess(data.success)
-            })
-        }) */
+    startTransition(() => {
+      register(values)
+        .then(data => {
+          setError(data.error)
+          setSuccess(data.success)
+        })
+    })
   }
 
   return (
@@ -120,7 +118,7 @@ const RegisterForm = () => {
                       className="shadow-md border-none font-bold tracking-widest"
                       {...field}
                       disabled={isPending}
-                      placeholder="E-EMAIL *"
+                      placeholder="E-MAIL *"
                     />
                   </FormControl>
                   <FormMessage />

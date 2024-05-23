@@ -22,7 +22,7 @@ export const register = async (values: RegisterSchemaValues) => {
 
   if (existingUser) {
     return {
-      error: "Email already in use!"
+      error: "Email já está em uso!"
     }
   }
 
@@ -36,5 +36,5 @@ export const register = async (values: RegisterSchemaValues) => {
     }
   })
 
-  return { success: "Successfully registered!" }
+  return { success: "Registrado com sucesso!" }
 }
