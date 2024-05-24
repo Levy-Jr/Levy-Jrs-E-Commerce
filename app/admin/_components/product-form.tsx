@@ -88,6 +88,7 @@ export const ProductForm = ({
         }
       } catch (error) {
         toast.error("Ops! Algo deu errado.")
+        console.log(error)
       }
     })
   }
