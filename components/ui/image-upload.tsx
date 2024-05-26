@@ -61,7 +61,7 @@ const ImageUpload = ({ disabled, onChange, onRemove, onDefault, value }: ImageUp
         )
         )}
       </div>
-      <CldUploadWidget onSuccess={onUpload} uploadPreset="w37qobsu">
+      <CldUploadWidget onSuccess={onUpload} uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_PRESET}>
         {({ open }) => {
           const onClick = () => {
             open()
