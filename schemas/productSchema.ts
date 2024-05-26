@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-const imageSchema = z.object({ url: z.string(), defaultImage: z.boolean().default(false).optional() }).array()
+const imageSchema = z.object({ url: z.string(), defaultImage: z.boolean().default(false).optional() }).array().min(1,
+  {
+    message: "Imagem é obrigatória"
+  }
+)
 
 export const CreateProductSchema = z.object({
   name: z.string().min(1, {

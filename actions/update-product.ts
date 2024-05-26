@@ -2,7 +2,6 @@
 
 import { db } from "@/lib/db"
 import { UpdateProductSchema } from "@/schemas/productSchema"
-import fs from "fs/promises"
 import { revalidatePath } from "next/cache"
 import { notFound, redirect } from "next/navigation"
 import { z } from "zod"
@@ -40,10 +39,12 @@ export const updateProduct = async (id: string, values: ProductFormValues) => {
       if (images[i].url) {
         imagesUrl.push({ url: images[i].url, defaultImage: images[i].defaultImage })
       }
+
     }
-
+    if ((imagesUrl.every(i => !i.defaultImage))) {
+      imagesUrl[0].defaultImage = true
+    }
   }
-
 
   await db.product.update({
     where: {
