@@ -36,7 +36,7 @@ const SuccessPage = async ({ searchParams }: {
       <div className="flex gap-4 items-center">
         <div className="aspect-square flex-shrink-0 w-1/3 relative">
           <Image
-            src={product.images.filter(img => img.defaultImage)[0].imagePath}
+            src={product.images.filter(img => img.defaultImage)[0].url}
             fill
             alt={product.name}
           />

@@ -22,7 +22,7 @@ type OrderItemInfoProps = {
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" })
 
 export const OrderItemInfo = ({ orderItem, product }: OrderItemInfoProps) => {
-  const defaultProductImage = product.images.filter(img => img.defaultImage)[0].imagePath
+  const defaultProductImage = product.images.filter(img => img.defaultImage)[0].url
 
   return (
     <>
@@ -46,7 +46,7 @@ export const OrderItemInfo = ({ orderItem, product }: OrderItemInfoProps) => {
         <Img
           width="100%"
           alt={product.name}
-          src={`${process.env.NEXT_PUBLIC_SERVER_URL}${defaultProductImage}`}
+          src={defaultProductImage}
         />
         <Row className="mt-8">
           <Column>

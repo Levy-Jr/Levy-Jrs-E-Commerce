@@ -1,21 +1,19 @@
 "use client"
 
 import { createProduct } from "@/actions/create-product"
-import { DefaultProductImage, DeleteProductImage } from "@/actions/product-image"
 import { updateProduct } from "@/actions/update-product"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import ImageUpload from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { CreateProductSchema, UpdateProductSchema } from "@/schemas/productSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Category, Prisma } from "@prisma/client"
-import { Check, TrashIcon } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
-import { useState, useTransition } from "react"
+import { useTransition } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { z } from "zod"
@@ -33,18 +31,18 @@ type CreateProductFormProps = {
 }
 
 type ProductFormValues = z.infer<typeof CreateProductSchema>
+type UpdateProductFormValues = z.infer<typeof UpdateProductSchema>
 
 export const ProductForm = ({
   categories,
   initialData
 }: CreateProductFormProps) => {
-  const [error, setError] = useState<string | undefined>()
-  const [success, setSuccess] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(initialData ? UpdateProductSchema : CreateProductSchema),
     defaultValues: initialData ? {
+      images: initialData.images,
       name: initialData.name,
       desc: initialData.desc,
       price: Number(String(initialData.price)),
@@ -52,6 +50,7 @@ export const ProductForm = ({
       isArchived: initialData.isArchived,
       isFeatured: initialData.isFeatured,
     } : {
+      images: [],
       name: "",
       desc: "",
       price: 0,
@@ -60,31 +59,11 @@ export const ProductForm = ({
   })
 
   const onSubmit = (values: ProductFormValues) => {
-    setError("")
-    setSuccess("")
-
     startTransition(async () => {
-      const formData = new FormData();
-
-      if (values.image) {
-        for (let i = 0; i < values.image.length; i++) {
-          formData.append('image', values.image[i]);
-        }
-      }
-      formData.append('name', values.name)
-      formData.append('desc', values.desc)
-      formData.append('price', String(values.price))
-      formData.append('categoryId', values.categoryId)
-      formData.append('isArchived', JSON.stringify(values.isArchived))
-      formData.append('isFeatured', JSON.stringify(values.isFeatured))
-
       try {
         if (initialData == null) {
-          await createProduct(formData)
+          await createProduct(values)
           toast.success("Produto criado com sucesso.")
-        } else {
-          await updateProduct(initialData.id, formData)
-          toast.success("Produto atualizado com sucesso.")
         }
       } catch (error) {
         toast.error("Ops! Algo deu errado.")
@@ -93,10 +72,26 @@ export const ProductForm = ({
     })
   }
 
+  const onSubmitEdit = (values: UpdateProductFormValues) => {
+    startTransition(async () => {
+      if (initialData) {
+        try {
+          await updateProduct(initialData.id, values)
+          toast.success("Produto atualizado com sucesso.")
+        }
+
+        catch (error) {
+          toast.error("Ops! Algo deu errado.")
+          console.log(error)
+        }
+      }
+    })
+  }
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={initialData ? form.handleSubmit(onSubmitEdit) : form.handleSubmit(onSubmit)}
         className="max-w-screen-sm mx-auto mt-16 bg-red-600 text-white shadow-red-950 shadow-lg p-4 py-8 rounded-md"
       >
         <h1 className="text-center text-2xl font-bold mb-4">
@@ -105,88 +100,31 @@ export const ProductForm = ({
         <div className="space-y-4">
           <FormField
             control={form.control}
-            name="image"
-            render={({ field: { value, onChange, ...fieldProps } }) => (
-              <FormItem>
-                <FormLabel>Adicionar imagem: </FormLabel>
-                <FormControl>
-                  <Input
-                    className="text-black"
-                    type="file"
-                    onChange={e =>
-                      onChange([...Array.from(e.target.files ?? [])])
-                    }
-                    {...fieldProps}
-                    multiple
-                    disabled={isPending}
-                  />
-                </FormControl>
-                {initialData != null &&
-                  <div className="grid grid-cols-3 gap-4">
-                    {initialData.images.map((image, index) => {
-                      if (image.defaultImage) {
-                        return (
-                          <div key={index} className="flex flex-col">
-                            <div className="relative aspect-square">
-                              <Image
-                                src={image.imagePath}
-                                fill
-                                alt="Product Image" />
-                            </div>
-                            <div className="flex justify-end">
-                              <Button
-                                disabled={isPending}
-                                onClick={() => DeleteProductImage(initialData.id, image.id)}
-                                variant="destructive"
-                                type="button">
-                                <TrashIcon className="w-[1rem]" />
-                              </Button>
-                            </div>
-                          </div>
-                        )
-                      } else {
-                        return (
-                          <div
-                            key={index}
-                            className="flex flex-col">
-                            <div className="relative aspect-square">
-                              <Image
-                                src={image.imagePath}
-                                fill
-                                alt="Product Image" />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                              <Button
-                                disabled={isPending}
-                                onClick={() => {
-                                  startTransition(() => {
-                                    DefaultProductImage(initialData.id, image.id, initialData.images)
-                                  })
-                                }}
-                                type="button"
-                                className="bg-green-500 hover:bg-green-600"
-                              ><Check className="w-[1rem]" /></Button>
-                              <Button
-                                disabled={isPending}
-                                onClick={() => {
-                                  startTransition(() => {
-                                    DeleteProductImage(initialData.id, image.id)
-                                  })
-                                }}
-                                variant="destructive"
-                                type="button"
-                              >
-                                <TrashIcon className="w-[1rem]" />
-                              </Button>
-                            </div>
-                          </div>)
-                      }
-                    })}
-                  </div>
-                }
-                <FormMessage />
-              </FormItem>
-            )}
+            name="images"
+            render={({ field }) => (<FormItem>
+              <FormLabel>Adicionar imagem: </FormLabel>
+              <FormControl>
+                <ImageUpload
+                  disabled={isPending}
+                  value={field.value.map(image => image.url)}
+                  onChange={url => {
+                    field.onChange(field.value.push({ url }))
+                    return field.onChange(field.value)
+                  }}
+                  onRemove={url => field.onChange([...field.value.filter(productImg => productImg.url !== url)])}
+                  onDefault={url => field.onChange(
+                    field.value.map(productImg => {
+                      if (productImg.defaultImage === true) productImg.defaultImage = false
+                      if (productImg.url == url) productImg.defaultImage = true
+                      return productImg
+                    })
+                  )}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )
+            }
           />
           <FormField
             control={form.control}

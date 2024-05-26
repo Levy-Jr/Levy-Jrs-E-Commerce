@@ -25,7 +25,7 @@ type PurchaseReceiptEmailProps = {
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" })
 
 const PurchaseReceiptEmail = ({ orderItem, product }: PurchaseReceiptEmailProps) => {
-  const defaultProductImage = product.images.filter(img => img.defaultImage)[0].imagePath
+  const defaultProductImage = product.images.filter(img => img.defaultImage)[0].url
 
   return (
     <Html>
@@ -54,7 +54,7 @@ const PurchaseReceiptEmail = ({ orderItem, product }: PurchaseReceiptEmailProps)
               <Img
                 width="100%"
                 alt={product.name}
-                src={`${process.env.NEXT_PUBLIC_SERVER_URL}${defaultProductImage}`}
+                src={defaultProductImage}
               />
               <Row className="mt-8">
                 <Column>

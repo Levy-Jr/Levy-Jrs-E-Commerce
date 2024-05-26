@@ -53,7 +53,7 @@ export const CartTable = () => {
               <TableCell className="p-0">
                 <div className="relative aspect-square w-full">
                   <Image
-                    src={cartItem.images.filter(img => img.defaultImage)[0].imagePath}
+                    src={cartItem.images.filter(img => img.defaultImage)[0].url}
                     alt={cartItem.name}
                     fill
                   />

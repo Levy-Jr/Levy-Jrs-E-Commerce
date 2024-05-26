@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-const fileSchema = z.custom<File[]>()
-const imageSchema = fileSchema.refine(files => files.every(file => file?.size === 0 || file?.type?.startsWith("image/"), "Image required"))
+const imageSchema = z.object({ url: z.string(), defaultImage: z.boolean().default(false).optional() }).array()
 
 export const CreateProductSchema = z.object({
   name: z.string().min(1, {
@@ -18,9 +17,9 @@ export const CreateProductSchema = z.object({
   }),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
-  image: imageSchema.refine(files => files.every(file => file?.size > 0, "required"))
+  images: imageSchema
 })
 
 export const UpdateProductSchema = CreateProductSchema.extend({
-  image: imageSchema.optional()
+  images: imageSchema.optional()
 })

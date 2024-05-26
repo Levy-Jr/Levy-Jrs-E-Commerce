@@ -1,57 +1,37 @@
 "use server"
 
 import { db } from "@/lib/db"
-import fs from "fs/promises"
 import { CreateProductSchema } from "@/schemas/productSchema"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { z } from "zod"
 
-export const createProduct = async (values: FormData) => {
-  const imageValues = values.getAll('image')
-  const nameValue = values.get('name')
-  const descValue = values.get('desc')
-  const priceValue = values.get('price')
-  const categoryIdValue = values.get('categoryId')
+type ProductFormValues = z.infer<typeof CreateProductSchema>
 
-  const cleanValues = {
-    image: imageValues,
-    name: nameValue,
-    desc: descValue,
-    price: priceValue,
-    categoryId: categoryIdValue
-  }
-
-  const validatedFields = CreateProductSchema.safeParse(cleanValues)
+export const createProduct = async (values: ProductFormValues) => {
+  const validatedFields = CreateProductSchema.safeParse(values)
   if (!validatedFields.success) {
     return validatedFields.error.formErrors.fieldErrors
   }
 
-  const { categoryId, name, desc, price, image } = validatedFields.data
+  const { categoryId, name, desc, price, images } = validatedFields.data
 
-  /* the recursive option creates the directory when it doesn't exist, and doesn't create anything when it already exists */
-  await fs.mkdir("public/products", { recursive: true })
+  // TODO: ARMAZENAR ARQUIVOS EM UM SERVIDOR EXTERNO, NA NUVEM, E NÃO NO PRÓPRIO SERVIDOR DO NEXT POIS NÃO É POSSÍVEL ADICIONAR UM ARQUIVO NESSE SERVIDOR QUANDO ESTÁ EM PRODUÇÃO
 
-  let newImagePath = ""
-
-  type ImagesPath = {
-    imagePath: string;
+  type ImagesUrl = {
+    url: string;
     defaultImage?: boolean;
   }
-  const imagesPath: ImagesPath[] = []
-  for (let i = 0; i < image.length; i++) {
-    newImagePath = `/products/${crypto.randomUUID()}=${image[i].name}`
-    imagesPath.push({
-      imagePath: newImagePath
+
+  const imagesUrl: ImagesUrl[] = []
+
+  for (let i = 0; i < images.length; i++) {
+    imagesUrl.push({
+      url: images[i].url
     })
-    await fs.writeFile(
-      `public${newImagePath}`,
-      Buffer.from(await image[i].arrayBuffer())
-    )
   }
 
-  if (imagesPath.length > 0) {
-    imagesPath[0].defaultImage = true
-  }
+  imagesUrl[0].defaultImage = true
 
   await db.product.create({
     data: {
@@ -61,7 +41,7 @@ export const createProduct = async (values: FormData) => {
       price,
       images: {
         createMany: {
-          data: imagesPath
+          data: imagesUrl
         }
       }
     }

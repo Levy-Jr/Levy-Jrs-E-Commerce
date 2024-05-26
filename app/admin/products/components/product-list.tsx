@@ -36,7 +36,7 @@ const ProductList = ({
           <h2 className="text-center uppercase font-bold">{product.name}</h2>
           <div className="relative aspect-square">
             <Image
-              src={product.images.filter(img => img.defaultImage)[0] ? product.images.filter(img => img.defaultImage)[0].imagePath : product.images[0].imagePath}
+              src={product.images.filter(img => img.defaultImage)[0].url}
               alt={product.name}
               fill
             />

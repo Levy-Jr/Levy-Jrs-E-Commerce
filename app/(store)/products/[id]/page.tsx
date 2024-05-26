@@ -31,7 +31,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       <div className="flex justify-between gap-4">
         <div className="relative aspect-square w-full max-w-[45%] mx-auto p-6">
           <Image
-            src={product.images.filter(img => img.defaultImage)[0].imagePath}
+            src={product.images.filter(img => img.defaultImage)[0].url}
             fill
             alt={product.name}
           />

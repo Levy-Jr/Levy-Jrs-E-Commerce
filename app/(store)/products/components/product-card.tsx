@@ -19,7 +19,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </CardHeader>
       <div className="relative aspect-square">
         <Image
-          src={product.images.filter(img => img.defaultImage)[0].imagePath}
+          src={product.images.filter(img => img.defaultImage)[0].url}
           fill
           alt={product.name}
         />

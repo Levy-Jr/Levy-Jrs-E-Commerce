@@ -5,43 +5,18 @@ import { UpdateProductSchema } from "@/schemas/productSchema"
 import fs from "fs/promises"
 import { revalidatePath } from "next/cache"
 import { notFound, redirect } from "next/navigation"
+import { z } from "zod"
 
-export const updateProduct = async (id: string, values: FormData) => {
-  const imageValues = values.getAll('image')
-  const nameValue = values.get('name')
-  const descValue = values.get('desc')
-  const priceValue = values.get('price')
-  const categoryIdValue = values.get('categoryId')
-  let isArchivedValue = values.get('isArchived')
-  let isFeaturedValue = values.get('isFeatured')
+type ProductFormValues = z.infer<typeof UpdateProductSchema>
 
-  type CleanValues = {
-    image: FormDataEntryValue[]
-    name: FormDataEntryValue | null
-    desc: FormDataEntryValue | null
-    price: FormDataEntryValue | null
-    categoryId: FormDataEntryValue | null
-    isArchived: boolean
-    isFeatured: boolean
-  }
-
-  const cleanValues: CleanValues = {
-    image: imageValues,
-    name: nameValue,
-    desc: descValue,
-    price: priceValue,
-    categoryId: categoryIdValue,
-    isArchived: !!JSON.parse(String(isArchivedValue)),
-    isFeatured: !!JSON.parse(String(isFeaturedValue))
-  }
-
-  const validatedFields = UpdateProductSchema.safeParse(cleanValues)
+export const updateProduct = async (id: string, values: ProductFormValues) => {
+  const validatedFields = UpdateProductSchema.safeParse(values)
 
   if (!validatedFields.success) {
     return validatedFields.error.formErrors.fieldErrors
   }
 
-  const { categoryId, name, desc, price, image, isArchived, isFeatured } = validatedFields.data
+  const { categoryId, name, desc, price, images, isArchived, isFeatured } = validatedFields.data
 
   const product = await db.product.findUnique({
     where: {
@@ -54,28 +29,21 @@ export const updateProduct = async (id: string, values: FormData) => {
 
   if (product == null) return notFound()
 
-  let newImagePath = ""
-
-  type ImagesPath = {
-    imagePath: string;
+  type ImagesUrl = {
+    url: string;
     defaultImage?: boolean;
   }
-  const imagesPath: ImagesPath[] = []
+  const imagesUrl: ImagesUrl[] = []
 
-  if (image) {
-    for (let i = 0; i < image.length; i++) {
-      if (image != null && image[i].size > 0) {
-        newImagePath = `/products/${crypto.randomUUID()}=${image[i].name}`
-        imagesPath.push({
-          imagePath: newImagePath
-        })
-        await fs.writeFile(
-          `public${newImagePath}`,
-          Buffer.from(await image[i].arrayBuffer())
-        )
+  if (images) {
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].url) {
+        imagesUrl.push({ url: images[i].url, defaultImage: images[i].defaultImage })
       }
     }
+
   }
+
 
   await db.product.update({
     where: {
@@ -89,8 +57,9 @@ export const updateProduct = async (id: string, values: FormData) => {
       isArchived,
       isFeatured,
       images: {
+        deleteMany: {},
         createMany: {
-          data: imagesPath
+          data: imagesUrl
         }
       }
     }
