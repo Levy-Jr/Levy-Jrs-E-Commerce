@@ -1,18 +1,20 @@
-import ContactCard from "./components/contact-card"
+import Image from "next/image"
+import { GeneralContactForm } from "./components/general-contact-form"
+import Logo from "/public/e-commerce/logo.svg"
 
-const ContactPage = () => {
+const ContactGeneralPage = () => {
   return (
-    <div className="pt-8 p-6">
-      <h1 className="text-3xl tracking-wider font-semibold text-center py-6">CONTATO</h1>
-      <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 mt-8">
-        <ContactCard
-          title="ASSUNTOS GERAIS"
-          desc="Para questões gerais, feedback ou parcerias, acesse:"
-          href="/contact/general"
+    <div className="lg:flex">
+      <div className="pt-16 lg:pt-0 lg:static lg:right-0 lg:translate-x-0 lg:w-1/2 lg:top-0 lg:bg-[#1E1E1E] lg:grid lg:place-items-center">
+        <Image
+          src={Logo}
+          alt="Logo"
+          className="lg:w-[min(32.188rem,100%)] mx-auto"
         />
       </div>
+      <GeneralContactForm />
     </div>
   )
 }
 
-export default ContactPage
+export default ContactGeneralPage

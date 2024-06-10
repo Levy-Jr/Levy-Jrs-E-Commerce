@@ -16,7 +16,7 @@ export default auth(req => {
   }
 
   if (nextUrl.pathname === "/my-account") {
-    if (!isLoggedIn) return Response.redirect(new URL("/auth", nextUrl))
+    if (!isLoggedIn) return Response.redirect(new URL("/login", nextUrl))
   }
 
   if (!isAdminRoute) return

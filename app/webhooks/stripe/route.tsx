@@ -81,8 +81,6 @@ export async function POST(req: NextRequest) {
               orderItems={cleanOrderItems}
             />)
           })
-
-          new NextResponse()
         }
         break;
       case 'single_product_session':
@@ -175,10 +173,10 @@ export async function POST(req: NextRequest) {
         console.log(`Unhandled event type ${event.type}`)
     }
 
-    return new NextResponse()
+    return NextResponse.json({ result: event, ok: true })
   } catch (error) {
     console.error(error)
-    return new NextResponse('error', { status: 500 })
+    return NextResponse.json({ message: "Something went wrong", status: 500 })
   }
 
 }

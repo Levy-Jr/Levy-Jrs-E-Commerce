@@ -3,11 +3,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import useCart from "@/hooks/use-cart"
 import { currencyFormatter } from "@/lib/utils"
-import { TrashIcon } from "lucide-react"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 import toast from "react-hot-toast"
+import Lixeira from "/public/e-commerce/carrinho-de-compras/lixeira-icone.svg"
 
 export const CartTable = () => {
   const searchParams = useSearchParams()
@@ -35,34 +35,41 @@ export const CartTable = () => {
     <>
       <span
         className="cursor-pointer"
-        onClick={removeAll}
-      >Remover tudo</span>
+        onClick={removeAll}>
+        Remover tudo
+      </span>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="text-xl">
             <TableHead>
               <span className="sr-only">Imagem do produto</span>
             </TableHead>
-            <TableHead className="text-center">Produto</TableHead>
-            <TableHead className="text-center">Preço</TableHead>
+            <TableHead className="text-center text-white">Produto</TableHead>
+            <TableHead className="text-center text-white">Preço</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-center">
           {cart.items.map(cartItem => (
-            <TableRow key={cartItem.id}>
+            <TableRow key={cartItem.id} className="border-none">
               <TableCell className="p-0">
-                <div className="relative aspect-square w-full">
-                  <Image
-                    src={cartItem.images.filter(img => img.defaultImage)[0].url}
-                    alt={cartItem.name}
-                    fill
-                  />
-                </div>
+                <Image
+                  src={cartItem.images.filter(img => img.defaultImage)[0].url}
+                  alt={cartItem.name}
+                  width={90}
+                  height={90}
+                />
               </TableCell>
-              <TableCell>{cartItem.name}</TableCell>
-              <TableCell>{currencyFormatter.format(Number(cartItem.price))}</TableCell>
-              <TableCell onClick={() => onRemove(cartItem.id)}>
-                <TrashIcon className="cursor-pointer" />
+              <TableCell className="text-xl font-semibold">
+                {cartItem.name}
+              </TableCell>
+              <TableCell className="text-xl font-semibold">{currencyFormatter.format(Number(cartItem.price))}</TableCell>
+              <TableCell>
+                <Image
+                  className="cursor-pointer"
+                  onClick={() => onRemove(cartItem.id)}
+                  src={Lixeira}
+                  alt="Lixeira"
+                />
               </TableCell>
             </TableRow>
           ))}

@@ -1,6 +1,7 @@
 "use client"
 
 import { logout } from "@/actions/logout"
+import { Button } from "@/components/ui/button";
 
 type LogoutButtonProps = {
   children?: React.ReactNode;
@@ -14,11 +15,11 @@ export const LogoutButton = ({
   }
 
   return (
-    <span
+    <Button
       onClick={onClick}
-      className="cursor-pointer"
+      className="cursor-pointer bg-[#F33C52] hover:bg-[#ac3241] gap-4 text-2xl rounded-full p-6"
     >
       {children}
-    </span>
+    </Button>
   )
 }

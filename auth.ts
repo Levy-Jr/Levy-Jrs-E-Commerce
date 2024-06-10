@@ -13,8 +13,8 @@ export const {
   signOut
 } = NextAuth({
   pages: {
-    signIn: "/auth",
-    error: "/auth/error"
+    signIn: "/login",
+    error: "/error"
   },
   callbacks: {
     async session({ token, session }) {

@@ -3,10 +3,12 @@ import Summary from "./_components/summary"
 
 const CartPage = () => {
   return (
-    <div className="max-w-screen-md mx-auto my-6">
-      <h1 className="uppercase text-center mb-8 font-bold text-2xl">Carrinho de compras</h1>
-      <CartTable />
-      <Summary />
+    <div className="my-6">
+      <h1 className="text-center mb-8 font-bold text-2xl">Carrinho de compras</h1>
+      <div className="w-[min(56.25rem,100%)] mx-auto">
+        <CartTable />
+        <Summary />
+      </div>
     </div>
   )
 }

@@ -12,6 +12,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import Seta from "/public/e-commerce/criar-conta/seta-icone.svg"
+import Image from "next/image"
+import Link from "next/link"
 
 type RegisterFormValues = z.infer<typeof RegisterSchema>
 
@@ -45,15 +48,14 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className="shadow-xl w-full max-w-[30rem] font-bold p-6 rounded-md">
-      <h2 className="text-center tracking-wider">CRIAR CONTA</h2>
-      <p className="text-sm font-normal mt-4">Campos com (*) são obrigatórios.</p>
+    <div className="lg:w-1/2 ml-auto min-h-screen text-white py-8 lg:grid lg:place-items-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8"
+          className="space-y-6 w-[min(30rem,100%)] mx-auto px-6 md:px:0"
         >
-          <div className="space-y-4 mt-4">
+          <h1 className="text-center text-4xl font-bold">Criar conta</h1>
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="fullName"
@@ -61,10 +63,10 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="shadow-md border-none font-bold tracking-widest"
+                      className="placeholder:text-gray placeholder:text-xl text-xl border-0 caret-white border-b rounded-none focus-visible:ring-offset-0 bg-transparent border-white font-bold"
                       {...field}
                       disabled={isPending}
-                      placeholder="NOME COMPLETO *"
+                      placeholder="Nome completo"
                     />
                   </FormControl>
                   <FormMessage />
@@ -79,11 +81,11 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       type="number"
-                      className="shadow-md border-none font-bold tracking-widest"
+                      className="placeholder:text-gray placeholder:text-xl text-xl border-0 caret-white border-b rounded-none focus-visible:ring-offset-0 bg-transparent border-white font-bold"
                       {...field}
                       onChange={e => field.onChange(escapeCPF(e.target.value))}
                       disabled={isPending}
-                      placeholder="CPF *"
+                      placeholder="CPF"
                     />
                   </FormControl>
                   <FormMessage />
@@ -98,10 +100,10 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       type="number"
-                      className="shadow-md border-none font-bold tracking-widest"
+                      className="placeholder:text-gray placeholder:text-xl text-xl border-0 caret-white border-b rounded-none focus-visible:ring-offset-0 bg-transparent border-white font-bold"
                       {...field}
                       disabled={isPending}
-                      placeholder="TELEFONE *"
+                      placeholder="Telefone"
                     />
                   </FormControl>
                   <FormMessage />
@@ -115,10 +117,10 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="shadow-md border-none font-bold tracking-widest"
+                      className="placeholder:text-gray placeholder:text-xl text-xl border-0 caret-white border-b rounded-none focus-visible:ring-offset-0 bg-transparent border-white font-bold"
                       {...field}
                       disabled={isPending}
-                      placeholder="E-MAIL *"
+                      placeholder="E-mail"
                     />
                   </FormControl>
                   <FormMessage />
@@ -133,10 +135,10 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      className="shadow-md border-none font-bold tracking-widest"
+                      className="placeholder:text-gray placeholder:text-xl text-xl border-0 caret-white border-b rounded-none focus-visible:ring-offset-0 bg-transparent border-white font-bold"
                       {...field}
                       disabled={isPending}
-                      placeholder="SENHA *"
+                      placeholder="Senha"
                     />
                   </FormControl>
                   <FormMessage />
@@ -144,14 +146,16 @@ const RegisterForm = () => {
               )}
             />
           </div>
+          <p className="font-bold text-xl">Já tem uma conta? <Link href="/login" className="text-pink">Fazer login</Link></p>
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button
             disabled={isPending}
             type="submit"
-            className="w-full bg-red-600 hover:bg-red-500 font-bold tracking-widest"
+            className="w-full bg-white hover:bg-gray text-black hover:text-black text-3xl py-7 font-bold rounded-full inline-flex items-center"
           >
-            CRIAR CONTA
+            Criar conta
+            <Image src={Seta} alt="Seta" className="ml-4 inline" />
           </Button>
         </form>
       </Form>
