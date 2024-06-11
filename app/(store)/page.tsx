@@ -1,7 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
-import Link from "next/link";
-import { ProductCard } from "./products/components/product-card";
+import Image from "next/image";
+import Banner from "/public/e-commerce/inicio/banner.webp"
+import { WhatsappButton } from "@/components/ui/whatsapp-button";
+import { FeaturedProductCard } from "./_components/featured-product-card";
+import { Footer } from "@/components/footer";
 
 const Home = async () => {
   const featuredProducts = await db.product.findMany({
@@ -13,26 +15,32 @@ const Home = async () => {
       category: true,
       images: true
     },
-    take: 2
+    take: 3
   })
 
   return (
-    <main className="mt-6">
-      <h1 className="text-center text-4xl tracking-wide font-semibold">E-COMMERCE DE <span className="text-red-600 font-bold">PERIFÉRICOS</span></h1>
-      <div className="grid grid-cols-2 mx-auto gap-4 my-8 max-w-[40rem]">
-        {featuredProducts.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-      <div className="flex justify-center">
-        <Button
-          className="bg-red-600 hover:bg-red-700 max-w-48 py-6 w-full font-bold tracking-widest"
-          asChild
-        >
-          <Link href="/products">VER MAIS</Link>
-        </Button>
-      </div>
-    </main>
+    <>
+      <main>
+        <Image
+          src={Banner}
+          alt="Banner da loja"
+          className="w-full"
+        />
+        <div className="p-8">
+          <h1 className="text-5xl font-bold">Destaques</h1>
+          <WhatsappButton />
+          <ul className="grid grid-cols-3 gap-6 place-content-between my-10">
+            {featuredProducts.map(product => (
+              <FeaturedProductCard
+                key={product.id}
+                product={product}
+              />
+            ))}
+          </ul>
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 }
 

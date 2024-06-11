@@ -5,7 +5,7 @@ const CartPage = () => {
   return (
     <div className="my-6">
       <h1 className="text-center mb-8 font-bold text-2xl">Carrinho de compras</h1>
-      <div className="w-[min(56.25rem,100%)] mx-auto">
+      <div className="w-[min(56.25rem,100%)] mx-auto px-4 md:px-0">
         <CartTable />
         <Summary />
       </div>

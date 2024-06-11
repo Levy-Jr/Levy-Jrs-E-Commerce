@@ -34,24 +34,28 @@ export const CartTable = () => {
   return (
     <>
       <span
-        className="cursor-pointer"
+        className="cursor-pointer text-[#F33C52] text-xl flex items-center gap-3"
         onClick={removeAll}>
         Remover tudo
+        <Image src={Lixeira} alt="Lixeira" className="inline" />
       </span>
       <Table>
         <TableHeader>
-          <TableRow className="text-xl">
-            <TableHead>
+          <TableRow className="text-xl flex pt-4">
+            <TableHead className="inline-block w-full">
               <span className="sr-only">Imagem do produto</span>
             </TableHead>
-            <TableHead className="text-center text-white">Produto</TableHead>
-            <TableHead className="text-center text-white">Preço</TableHead>
+            <TableHead className="text-center text-white inline-block w-full">Produto</TableHead>
+            <TableHead className="text-center text-white inline-block w-full">Preço</TableHead>
+            <TableHead className="inline-block w-full">
+              <span className="sr-only">Botão de deletar</span>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-center">
           {cart.items.map(cartItem => (
-            <TableRow key={cartItem.id} className="border-none">
-              <TableCell className="p-0">
+            <TableRow key={cartItem.id} className="border-none flex items-center justify-between mt-8">
+              <TableCell className="p-0 inline-block w-full">
                 <Image
                   src={cartItem.images.filter(img => img.defaultImage)[0].url}
                   alt={cartItem.name}
@@ -59,13 +63,13 @@ export const CartTable = () => {
                   height={90}
                 />
               </TableCell>
-              <TableCell className="text-xl font-semibold">
+              <TableCell className="text-xl font-semibold inline-block w-full">
                 {cartItem.name}
               </TableCell>
-              <TableCell className="text-xl font-semibold">{currencyFormatter.format(Number(cartItem.price))}</TableCell>
-              <TableCell>
+              <TableCell className="text-xl font-semibold inline-block w-full">{currencyFormatter.format(Number(cartItem.price))}</TableCell>
+              <TableCell className="inline-block w-full">
                 <Image
-                  className="cursor-pointer"
+                  className="cursor-pointer mx-auto"
                   onClick={() => onRemove(cartItem.id)}
                   src={Lixeira}
                   alt="Lixeira"

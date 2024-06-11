@@ -31,18 +31,18 @@ const Navbar = () => {
   return (
     <nav className="p-8 py-4 flex justify-between items-center space-x-4 lg:space-x-10">
       <Image src={Logo} alt="logo" />
-      <div className="space-x-4">
+      <div className="space-x-8">
         {routes.map(route => (
           <Link
             key={route.href}
             href={route.href}
-            className="text-xl text-white font-medium transition-colors p-2"
+            className="text-xl font-medium transition-colors p-2"
           >
             {route.label}
           </Link>
         ))}
       </div>
-      <div className="flex space-x-4">
+      <div className="flex space-x-8">
         <Link href="">
           <Image
             src={Favoritos}
