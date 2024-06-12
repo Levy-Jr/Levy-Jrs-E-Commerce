@@ -29,7 +29,7 @@ const Home = async () => {
         <div className="p-8">
           <h1 className="text-5xl font-bold">Destaques</h1>
           <WhatsappButton />
-          <ul className="grid grid-cols-3 gap-6 place-content-between my-10">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-content-between my-10">
             {featuredProducts.map(product => (
               <FeaturedProductCard
                 key={product.id}

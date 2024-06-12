@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
-import Carrinho from "/public/e-commerce/inicio/carrinho-icone.svg"
+import Carrinho from "/public/e-commerce/inicio/carrinho-de-compras-preto.svg"
 import { currencyFormatter } from "@/lib/utils"
 
 type ProductCardProps = {
@@ -24,7 +24,7 @@ export const FeaturedProductCard = ({ product }: ProductCardProps) => {
         <h2 className="font-bold text-3xl">{product.name}</h2>
         <p className="font-semibold text-lg mt-3">{product.desc}</p>
         <p className="font-semibold text-4xl my-3">{currencyFormatter.format(Number(product.price))}</p>
-        <div className="flex items-center text-2xl gap-4">
+        <div className="flex items-center text-xl md:text-2xl gap-4">
           <Link
             className="py-2 font-semibold bg-black flex-1 text-center border-2 border-white rounded-full text-white inline-block"
             href={`/products/${product.id}`}>
@@ -34,7 +34,7 @@ export const FeaturedProductCard = ({ product }: ProductCardProps) => {
             className="py-2 font-semibold bg-white text-black inline-block flex-1 text-center rounded-full"
             href={`products/${product.id}/checkout`}>
             Comprar
-            <Image className="inline ml-2" src={Carrinho} alt="Carrinho de compras" />
+            <Image className="inline ml-1 md:ml-2" src={Carrinho} alt="Carrinho de compras" />
           </Link>
         </div>
       </div>
