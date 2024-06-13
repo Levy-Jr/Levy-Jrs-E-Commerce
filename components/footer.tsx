@@ -8,9 +8,10 @@ export const Footer = () => {
     <footer className="bg-[#1E1E1E]">
       <FooterBar />
       <div className="p-8">
-        <div className="grid grid-cols-3">
-          <div>
+        <div className="grid place-content-center md:place-content-start grid-cols-2 md:grid-cols-3">
+          <div className="col-span-2 md:col-span-1">
             <Image
+              className="mx-auto mb-12 md:mb-0 md:mx-0"
               src={Logo}
               alt="Logo"
               width={110}

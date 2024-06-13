@@ -11,15 +11,15 @@ type CategorySectionProps = {
 }
 
 export const CategorySection = ({ categories }: CategorySectionProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (
-    <div>
+    <div className="mb-4 md:mb-0">
       <button
         onClick={toggleMenu}
       >
-        <h2 className="text-3xl flex gap-4 font-bold mb-8">
+        <h2 className="text-3xl flex gap-4 font-bold mb-3 md:mb-8">
           Categorias
           <Image
             className={cn("inline", isOpen ? "rotate-180" : "")}
@@ -30,7 +30,10 @@ export const CategorySection = ({ categories }: CategorySectionProps) => {
       </button>
       <div className={cn("flex flex-col gap-3 text-xl font-medium", isOpen ? "" : "hidden")}>
         {categories.map(category => (
-          <button className="text-start inline">{category.name}</button>
+          <button
+            key={category.id}
+            className={"text-start text-[#67676B] inline"}
+          >{category.name}</button>
         ))}
       </div>
     </div>
