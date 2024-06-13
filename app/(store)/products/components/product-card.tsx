@@ -3,10 +3,12 @@ import Image from "next/image"
 import Link from "next/link"
 import Carrinho from "/public/e-commerce/inicio/carrinho-de-compras-preto.svg"
 
+type CleanProduct = Omit<Prisma.ProductGetPayload<{
+  include: { images: true, category: true }
+}>, 'price'> & { price: number }
+
 type ProductCardProps = {
-  product: Prisma.ProductGetPayload<{
-    include: { images: true, category: true }
-  }>
+  product: CleanProduct
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
