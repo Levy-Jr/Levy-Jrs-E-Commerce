@@ -20,7 +20,7 @@ export const FeaturedProductCard = ({ product }: ProductCardProps) => {
           fill
         />
       </div>
-      <div className="bg-[#1E1E1E] h-full p-4">
+      <div className="bg-[#1E1E1E] h-full p-6">
         <h2 className="font-bold text-3xl">{product.name}</h2>
         <p className="font-semibold text-lg mt-3">{product.desc}</p>
         <p className="font-semibold text-4xl my-3">{currencyFormatter.format(Number(product.price))}</p>

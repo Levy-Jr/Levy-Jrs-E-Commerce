@@ -13,7 +13,7 @@ type ProductCardProps = {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <li className="bg-[#1E1E1E]">
+    <li className="rounded-xl overflow-hidden bg-[#1E1E1E]">
       <div className="relative aspect-square">
         <Image
           src={product.images.filter(img => img.defaultImage)[0].url}
@@ -26,11 +26,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <p className="font-semibold text-lg my-4">{product.desc}</p>
         <div className="flex items-center text-xl md:text-2xl gap-4">
           <Link
-            className="py-2 font-semibold bg-black flex-1 text-center border-2 border-white rounded-full text-white inline-block"
+            className="py-2 font-semibold transition-colors bg-black hover:bg-white flex-1 text-center border-2 border-white hover:border-black rounded-full text-white hover:text-black inline-block"
             href={`/products/${product.id}`}
           >Ver mais</Link>
           <Link
-            className="py-2 font-semibold bg-white flex-1 text-center border-2 border-white rounded-full text-black inline-block"
+            className="py-2 font-semibold transition-colors bg-white hover:bg-gray flex-1 text-center rounded-full text-black inline-block"
             href={`/products/${product.id}/checkout`}
           >Comprar
             <Image className="inline ml-1" src={Carrinho} alt="Carrinho de compras" />

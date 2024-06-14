@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import useCart from "@/hooks/use-cart";
 import { CartItemType } from "@/types/CartType";
 
@@ -17,11 +16,11 @@ export const AddToCartButton = ({ children, data }: AddToCartButtonProps) => {
   }
 
   return (
-    <Button
-      className="bg-[#FF0000] hover:bg-red-600 font-semibold gap-4 text-lg w-full py-6"
+    <button
+      className="font-bold rounded-full border border-white transition-colors hover:bg-white hover:text-black gap-4 text-xl w-full py-3"
       onClick={onAddToCart}
     >
       {children}
-    </Button>
+    </button>
   )
 }

@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        product: "url('/e-commerce/pagina-do-produto/background-pg-produtos.webp')"
+      },
       colors: {
         black: "#0E0E10",
         darkGray: "#414141",

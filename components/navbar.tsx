@@ -4,7 +4,6 @@ import Image from "next/image"
 import Logo from "/public/e-commerce/logo.svg"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import Favoritos from "/public/e-commerce/inicio/favoritos-icone.svg"
 import Carrinho from "/public/e-commerce/inicio/carrinho-icone.svg"
 import Perfil from "/public/e-commerce/inicio/perfil-icone.svg"
 import { useState } from "react"
@@ -70,16 +69,6 @@ const Navbar = () => {
           ))}
         </div>
         <div className={cn("flex md:space-x-8", isOpen ? "flex-col gap-3 mt-3 items-center" : "")}>
-          <Link
-            className="hidden md:inline-block"
-            href=""
-          >
-            <Image
-              className="md:block"
-              src={Favoritos}
-              alt="Favoritos"
-            />
-          </Link>
           <Link
             className="text-xl font-medium transition-colors p-2 md:text-base md:font-normal md:transition-none md:p-0"
             href="/cart"

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db"
 import { currencyFormatter } from "@/lib/utils";
 import Image from "next/image";
@@ -13,7 +12,6 @@ type ProductPageProps = {
 }
 
 const ProductPage = async ({ params }: ProductPageProps) => {
-
   const product = await db.product.findFirst({
     where: {
       id: params.id
@@ -27,28 +25,31 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   if (!product) return null
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between gap-4">
-        <div className="relative aspect-square w-full max-w-[45%] mx-auto p-6">
+    <div className="px-8 bg-product bg-no-repeat bg-cover">
+      <div className="w-[min(31.25rem,100%)] gradient-border-bg bg-[rgba(0,0,0,0.6)] backdrop-blur-sm">
+        <div className="w-full mx-auto">
           <Image
+            className="w-full h-auto"
             src={product.images.filter(img => img.defaultImage)[0].url}
-            fill
             alt={product.name}
+            width={500}
+            height={600}
           />
         </div>
-        <div className="flex-2 p-6 shadow-xl w-full max-w-[45%] pt-20 mx-auto">
+        <div className="flex-2 p-6 w-full mx-auto">
           <h1 className="text-2xl font-bold tracking-wide uppercase">{product.name}</h1>
-          <p className="text-[#FF0000] my-4 font-bold text-lg tracking-wide">{currencyFormatter.format(Number(product.price))}</p>
-          <Button className="bg-[#FF0000] mb-4 hover:bg-red-600 font-semibold text-lg w-full py-6" asChild>
-            <Link href={`/products/${params.id}/checkout`}>COMPRAR</Link>
-          </Button>
+          <p className="my-5">{product.desc}</p>
+          <Link
+            className="bg-white text-xl text-center font-bold mb-4 rounded-full transition-colors hover:bg-gray text-black w-full py-3 inline-block"
+            href={`/products/${params.id}/checkout`}
+          >Comprar: {currencyFormatter.format(Number(product.price))}
+          </Link>
           <AddToCartButton data={product}>
-            Adicionar ao carrinho <ShoppingCart width={20} />
+            Colocar no carrinho <ShoppingCart width={20} className="inline" />
           </AddToCartButton>
         </div>
-      </div>
-      <div className="mt-12">
-        <p>{product.desc}</p>
+        <div className="mt-12">
+        </div>
       </div>
     </div>
   )

@@ -85,3 +85,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.gradient-border-bg {
+  border: .25rem solid;
+  border-image: linear-gradient(to bottom, #FB0000, #950000) 1;
+}
