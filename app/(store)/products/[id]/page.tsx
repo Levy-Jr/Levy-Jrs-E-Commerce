@@ -40,8 +40,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
             Colocar no carrinho <ShoppingCart width={20} className="inline" />
           </AddToCartButton>
         </div>
-        <div className="mt-12">
-        </div>
       </div>
     </div>
   )

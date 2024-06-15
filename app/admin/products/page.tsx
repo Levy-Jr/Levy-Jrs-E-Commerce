@@ -1,7 +1,9 @@
-import { Button } from "@/components/ui/button"
 import { db } from "@/lib/db"
 import Link from "next/link"
-import ProductList from "./components/product-list"
+import ProductTable from "./components/product-table"
+import Image from "next/image"
+import Bolsa from "/public/e-commerce/produtos/bolsa-icone.svg"
+import Lixeira from "/public/e-commerce/produtos/lixeira-icone.svg"
 
 const ProductsPage = async () => {
   const products = await db.product.findMany({
@@ -16,20 +18,18 @@ const ProductsPage = async () => {
   }))
 
   return (
-    <div className="p-8">
-      <div className="flex gap-4">
-        <Button asChild>
-          <Link href="/admin/products/create-product">Cadastrar produto</Link>
-        </Button>
-        <Button asChild>
-          <Link href="/admin/products/create-category">Cadastrar categoria</Link>
-        </Button>
+    <div className="w-[min(56.25rem,100%)] mx-auto px-4 pb-10 md:px-0">
+      <h1 className="text-center font-bold text-4xl mb-12">Produtos</h1>
+      <ProductTable products={cleanProducts} />
+      <div className="mt-16 flex gap-6 text-center">
+        <Link className="flex-1 py-2 rounded-full font-bold text-2xl bg-white text-black" href="/admin/products/create-product">Cadastrar produto
+          <Image className="inline ml-2" src={Bolsa} alt="Ícone de bolsa" />
+        </Link>
+        <Link className="flex-1 py-2 rounded-full font-bold text-2xl bg-[#F33C52]" href="">
+          Remover tudo
+          <Image className="inline ml-2" src={Lixeira} alt="Ícone de lixeira" />
+        </Link>
       </div>
-      {products &&
-        <ul className="grid grid-cols-2 md:grid-cols-3 gap-8">
-          <ProductList products={cleanProducts} />
-        </ul>
-      }
     </div>
   )
 }

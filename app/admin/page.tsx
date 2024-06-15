@@ -1,6 +1,6 @@
 const Admin = () => {
   return (
-    <div>Admin only page</div>
+    <div>Página apenas para administradores</div>
   )
 }
 
