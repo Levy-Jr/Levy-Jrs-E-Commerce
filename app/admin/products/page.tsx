@@ -3,7 +3,7 @@ import Link from "next/link"
 import ProductTable from "./components/product-table"
 import Image from "next/image"
 import Bolsa from "/public/e-commerce/produtos/bolsa-icone.svg"
-import Lixeira from "/public/e-commerce/produtos/lixeira-icone.svg"
+import { RemoveAllBtn } from "./components/remove-all-btn"
 
 const ProductsPage = async () => {
   const products = await db.product.findMany({
@@ -22,13 +22,13 @@ const ProductsPage = async () => {
       <h1 className="text-center font-bold text-4xl mb-12">Produtos</h1>
       <ProductTable products={cleanProducts} />
       <div className="mt-16 flex gap-6 text-center">
-        <Link className="flex-1 py-2 rounded-full font-bold text-2xl bg-white text-black" href="/admin/products/create-product">Cadastrar produto
+        <Link
+          className="flex-1 py-2 rounded-full font-bold text-2xl bg-white text-black"
+          href="/admin/products/create-product">
+          Cadastrar produto
           <Image className="inline ml-2" src={Bolsa} alt="Ícone de bolsa" />
         </Link>
-        <Link className="flex-1 py-2 rounded-full font-bold text-2xl bg-[#F33C52]" href="">
-          Remover tudo
-          <Image className="inline ml-2" src={Lixeira} alt="Ícone de lixeira" />
-        </Link>
+        <RemoveAllBtn />
       </div>
     </div>
   )

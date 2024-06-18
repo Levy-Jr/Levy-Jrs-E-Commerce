@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db"
+import { revalidatePath } from "next/cache"
 import { notFound } from "next/navigation"
 
 export const userOrderExists = async (email: string, productId: string) => {
@@ -28,6 +29,9 @@ export const deleteOrder = async (id: string) => {
   }
 
   if (orderItem == null) return notFound()
+
+  revalidatePath('/')
+  revalidatePath('/admin/orders')
 
   return cleanOrder
 }

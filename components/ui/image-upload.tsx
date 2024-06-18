@@ -4,8 +4,8 @@ import Image from "next/image";
 import { CldUploadWidget } from "next-cloudinary"
 
 import { useEffect, useState } from "react"
-import { Button } from "./button";
-import { Check, ImagePlus, Trash } from "lucide-react";
+import { Check, Trash } from "lucide-react";
+import LogoEditar from "/public/e-commerce/edicao-de-produto/editar-icone.svg"
 import toast from "react-hot-toast";
 
 type ImageUploadProps = {
@@ -33,24 +33,29 @@ const ImageUpload = ({ disabled, onChange, onRemove, onDefault, value }: ImageUp
     <div>
       <div className="grid grid-cols-3 gap-4 mb-4">
         {value.map((url, index) => (
-          <div key={index} className="relative w-[12.5rem] h-[12.5rem] rounded-md overflow-hidden">
-            <div className="z-10 absolute top-2 right-2">
-              <Button type="button" onClick={() => {
-                onRemove(url)
-                toast.success("Imagem excluída. Clique em cadastrar para atualizar")
-              }} variant="destructive" size="icon">
-                <Trash className="h-4 w-4" />
-              </Button>
+          <div key={index} className="relative w-[min(12.5rem,100%)] aspect-square rounded-md overflow-hidden">
+            <div className="z-10 absolute top-0 right-0">
+              <button
+                type="button"
+                className="bg-red-600 p-2 rounded-sm"
+                onClick={() => {
+                  onRemove(url)
+                  toast.success("Imagem excluída. Clique em cadastrar para atualizar")
+                }}>
+                <Trash className="h-4 w-4 text-white" />
+              </button>
             </div>
-            <div className="z-10 absolute top-2 left-2">
-              <Button type="button" onClick={
-                () => {
+            <div className="z-10 absolute top-0 left-0">
+              <button
+                type="button"
+                className="bg-[#209e20] p-2 rounded-sm"
+                onClick={() => {
                   onDefault(url)
                   toast.success("Imagem setada para imagem principal. Clique em cadastrar para atualizar")
                 }
-              } className="bg-green-500 hover:bg-green-600" size="icon">
-                <Check className="h-4 w-4" />
-              </Button>
+                }>
+                <Check className="h-4 w-4 text-white" />
+              </button>
             </div>
             <Image
               fill
@@ -68,15 +73,15 @@ const ImageUpload = ({ disabled, onChange, onRemove, onDefault, value }: ImageUp
           }
 
           return (
-            <Button
+            <button
+              className="w-full dashed-button flex text-white py-3 flex-col items-center"
               type="button"
               disabled={disabled}
-              variant="secondary"
               onClick={onClick}
             >
-              <ImagePlus className="h-4 w-4 mr-2" />
-              Upload an Image
-            </Button>
+              Adicionar imagem
+              <Image src={LogoEditar} alt="Logo do ecommerce" />
+            </button>
           )
         }}
       </CldUploadWidget>

@@ -1,7 +1,6 @@
 "use client"
 
 import { contactEmail } from "@/actions/email"
-import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -152,14 +151,14 @@ export const GeneralContactForm = () => {
               </FormItem>
             )}
           />
-          <Button
+          <button
             disabled={isPending}
             type="submit"
-            className="w-full bg-white hover:bg-gray text-black hover:text-black text-3xl py-7 font-bold rounded-full inline-flex items-center"
+            className="w-full bg-white hover:bg-gray text-black hover:text-black text-3xl py-3 font-bold rounded-full inline-flex justify-center items-center"
           >
             Enviar
             <Image src={Enviar} alt="Enviar" className="ml-4 inline" />
-          </Button>
+          </button>
         </form>
       </Form>
     </div>

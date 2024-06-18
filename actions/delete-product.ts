@@ -20,3 +20,12 @@ export const deleteProduct = async (id: string) => {
   revalidatePath('/products')
   revalidatePath('/admin/products')
 }
+
+export const deleteProducts = async () => {
+  const products = await db.product.deleteMany({})
+  if (products == null) return notFound()
+
+  revalidatePath('/')
+  revalidatePath('/products')
+  revalidatePath('/admin/products')
+}

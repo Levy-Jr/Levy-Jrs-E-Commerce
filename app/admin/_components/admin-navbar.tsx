@@ -24,7 +24,7 @@ const Navbar = () => {
       active: pathname === "/admin/products"
     },
     {
-      href: "/orders",
+      href: "/admin/orders",
       label: "Encomendas",
       active: pathname === "/orders"
     }
