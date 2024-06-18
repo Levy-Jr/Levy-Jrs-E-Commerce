@@ -2,7 +2,6 @@
 
 import { login } from "@/actions/login"
 import { FormError } from "@/components/form-error"
-import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { LoginSchema } from "@/schemas/authSchema"
@@ -86,14 +85,14 @@ const LoginForm = () => {
           </div>
           <p className="font-bold text-xl">Não tem uma conta? <Link href="/register" className="text-pink">Criar conta</Link></p>
           <FormError message={error} />
-          <Button
+          <button
             disabled={isPending}
             type="submit"
             className="w-full bg-white hover:bg-gray text-black hover:text-black text-3xl py-7 font-bold rounded-full inline-flex items-center"
           >
             Entrar
             <Image src={Entrar} alt="Entrar" className="ml-4 inline" />
-          </Button>
+          </button>
         </form>
       </Form>
     </div>

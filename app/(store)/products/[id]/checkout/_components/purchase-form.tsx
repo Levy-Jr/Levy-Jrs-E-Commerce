@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { currencyFormatter } from "@/lib/utils"
 import { AddressElement, LinkAuthenticationElement, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
@@ -55,15 +54,14 @@ export const PurchaseForm = ({ price }: { price: number }) => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button
-            className="w-full"
-            size="lg"
+          <button
+            className="w-full bg-black py-4 text-white rounded-md"
             disabled={stripe == null || elements == null || isLoading == null}
           >{isLoading ?
             "Comprando..."
             : `Comprar - ${currencyFormatter.format(price)}`
             }
-          </Button>
+          </button>
         </CardFooter>
       </Card>
     </form>

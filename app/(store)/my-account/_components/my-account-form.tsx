@@ -10,7 +10,6 @@ import { MyAccountSchema } from "@/schemas/myAccountSchema"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { User } from "next-auth"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { myAccount } from "@/actions/my-account"
 import { LogoutButton } from "./logout-button"
 import Image from "next/image"
@@ -167,7 +166,7 @@ export const MyAccountForm = ({ user }: MyAccountFormProps) => {
         />
 
         <div className="flex items-center gap-4">
-          <Button
+          <button
             className="bg-white text-2xl gap-2 rounded-full p-6 inline-flex hover:bg-gray font-bold text-black"
             disabled={isPending}
           >Atualizar
@@ -176,7 +175,7 @@ export const MyAccountForm = ({ user }: MyAccountFormProps) => {
               alt="Símbolo de recarregar"
               className="inline"
             />
-          </Button>
+          </button>
           <LogoutButton>
             Sair
             <Image

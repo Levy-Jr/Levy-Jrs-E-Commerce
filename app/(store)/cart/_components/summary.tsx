@@ -1,7 +1,6 @@
 "use client"
 
 import { cartCheckout } from "@/actions/cart-checkout"
-import { Button } from "@/components/ui/button"
 import useCart from "@/hooks/use-cart"
 import { currencyFormatter } from "@/lib/utils"
 import Image from "next/image"
@@ -41,7 +40,8 @@ const Summary = () => {
     <div className="max-w-[30rem] mt-12 space-y-3">
       <p className="font-semibold text-3xl">Preço total: {currencyFormatter.format(totalPrice)}</p>
       <div>
-        <Button
+        <button
+          type="button"
           disabled={pending}
           onClick={onCheckout}
           className="bg-white hover:bg-gray text-2xl font-bold gap-4 p-6 text-black rounded-full"
@@ -51,7 +51,7 @@ const Summary = () => {
             src={Seta}
             alt="Seta"
           />
-        </Button>
+        </button>
       </div>
     </div>
   )

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import { db } from "@/lib/db"
 import { currencyFormatter } from "@/lib/utils"
 import Image from "next/image"
@@ -49,11 +48,9 @@ const SuccessPage = async ({ searchParams }: {
           <div className="line-clamp-3 text-muted-foreground">
             {product.desc}
           </div>
-          <Button className="mt-4" size="lg" asChild>
-            {!isSuccess &&
-              <Link href={`products/${product.id}/purchase`}>Tente de novo</Link>
-            }
-          </Button>
+          {!isSuccess &&
+            <Link className="mt-4 inline-block px-4 py-1 rounded-md bg-black text-white" href={`products/${product.id}/purchase`}>Tente de novo</Link>
+          }
         </div>
       </div>
     </div>

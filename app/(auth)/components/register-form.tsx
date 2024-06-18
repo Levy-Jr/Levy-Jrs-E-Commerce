@@ -3,7 +3,6 @@
 import { register } from "@/actions/register"
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
-import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { escapeCPF } from "@/lib/utils"
@@ -149,14 +148,14 @@ const RegisterForm = () => {
           <p className="font-bold text-xl">Já tem uma conta? <Link href="/login" className="text-pink">Fazer login</Link></p>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button
+          <button
             disabled={isPending}
             type="submit"
             className="w-full bg-white hover:bg-gray text-black hover:text-black text-3xl py-7 font-bold rounded-full inline-flex items-center"
           >
             Criar conta
             <Image src={Seta} alt="Seta" className="ml-4 inline" />
-          </Button>
+          </button>
         </form>
       </Form>
     </div>
