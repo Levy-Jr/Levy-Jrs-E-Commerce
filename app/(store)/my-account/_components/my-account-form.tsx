@@ -167,7 +167,7 @@ export const MyAccountForm = ({ user }: MyAccountFormProps) => {
 
         <div className="flex items-center gap-4">
           <button
-            className="bg-white text-2xl gap-2 rounded-full p-6 inline-flex hover:bg-gray font-bold text-black"
+            className="bg-white text-2xl gap-2 rounded-full py-2 px-6 inline-flex items-center hover:bg-gray font-bold text-black"
             disabled={isPending}
           >Atualizar
             <Image

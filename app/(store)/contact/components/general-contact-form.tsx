@@ -157,7 +157,7 @@ export const GeneralContactForm = () => {
             className="w-full bg-white hover:bg-gray text-black hover:text-black text-3xl py-3 font-bold rounded-full inline-flex justify-center items-center"
           >
             Enviar
-            <Image src={Enviar} alt="Enviar" className="ml-4 inline" />
+            <Image src={Enviar} alt="Enviar" className="ml-3 inline" />
           </button>
         </form>
       </Form>

@@ -35,3 +35,11 @@ export const deleteOrder = async (id: string) => {
 
   return cleanOrder
 }
+
+export const deleteOrders = async () => {
+  const orderItems = await db.orderItem.deleteMany({})
+  if (orderItems == null) return notFound()
+
+  revalidatePath('/')
+  revalidatePath('/admin/orders')
+}

@@ -43,21 +43,21 @@ export const ProductSection = ({ products, categories }: ProductSectionProps) =>
           <h2 className="text-3xl flex gap-4 font-bold mb-3 md:mb-8">
             Categorias
             <Image
-              className={cn("inline", isOpen ? "rotate-180" : "")}
+              className={cn("", isOpen ? "rotate-180" : "")}
               src={CategoriaIcone}
               alt="Categoria"
             />
           </h2>
         </button>
-        <div className={cn("flex flex-col gap-3 text-xl font-medium", isOpen ? "" : "hidden")}>
+        <div className={cn("flex flex-col gap-3 text-base font-medium", isOpen ? "" : "hidden")}>
           <button
-            className={cn("text-start text-[#67676B] inline", categoryFilter === "" ? "text-white" : "")}
+            className={cn("text-start text-[#67676B]", categoryFilter === "" ? "text-white" : "")}
             onClick={() => setCategoryFilter("")}
           >Todos os produtos</button>
           {categories.map(category => (
             <button
               key={category.id}
-              className={cn("text-start text-[#67676B] inline", categoryFilter === category.name ? "text-white" : "")}
+              className={cn("text-start text-[#67676B]", categoryFilter === category.name ? "text-white" : "")}
               onClick={() => setCategoryFilter(category.name)}
             >
               {category.name}

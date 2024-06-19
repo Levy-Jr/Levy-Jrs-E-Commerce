@@ -16,7 +16,7 @@ export const LogoutButton = ({
   return (
     <button
       onClick={onClick}
-      className="cursor-pointer bg-[#F33C52] hover:bg-[#ac3241] gap-4 text-2xl rounded-full p-6"
+      className="cursor-pointer bg-[#F33C52] hover:bg-[#ac3241] inline-flex items-center gap-2 text-2xl rounded-full py-2 px-6"
     >
       {children}
     </button>
