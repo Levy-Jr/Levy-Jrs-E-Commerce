@@ -41,13 +41,6 @@ export const FooterBar = () => {
         <div className="flex md:w-full mx-[22.5%] flex-[0_0_100%] justify-between">
           <li className="flex items-center gap-2">
             <Image
-              src={AltaQualidade}
-              alt="Alta qualidade"
-            />
-            ALTA QUALIDADE
-          </li>
-          <li className="flex items-center gap-2">
-            <Image
               src={Trofeu}
               alt="troféu"
             />
@@ -59,6 +52,13 @@ export const FooterBar = () => {
               alt="Alta qualidade"
             />
             ALTA QUALIDADE
+          </li>
+          <li className="flex items-center gap-2">
+            <Image
+              src={Trofeu}
+              alt="troféu"
+            />
+            MELHOR DO MERCADO
           </li>
         </div>
       </ul>
