@@ -14,8 +14,8 @@ export const FooterBar = () => {
 
   return (
     <div className="bg-gradient-to-r from-[#FF7A00] to-[#FFC900] py-4 overflow-hidden" ref={emblaRef}>
-      <ul className="flex gap-8 font-black text-xl">
-        <div className="flex w-max md:w-full flex-[0_0_100%] px-8 justify-between">
+      <ul className="flex w-max font-black text-xl">
+        <div className="flex md:w-full flex-[0_0_100%] justify-between">
           <li className="flex items-center gap-2">
             <Image
               src={AltaQualidade}
@@ -38,7 +38,7 @@ export const FooterBar = () => {
             ALTA QUALIDADE
           </li>
         </div>
-        <div className="flex w-max md:w-full gap-8 mx-[22.5%] flex-[0_0_100%] justify-between">
+        <div className="flex md:w-full mx-[22.5%] flex-[0_0_100%] justify-between">
           <li className="flex items-center gap-2">
             <Image
               src={AltaQualidade}
