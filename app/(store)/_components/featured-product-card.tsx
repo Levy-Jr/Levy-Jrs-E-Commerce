@@ -26,12 +26,12 @@ export const FeaturedProductCard = ({ product }: ProductCardProps) => {
         <p className="font-semibold text-4xl my-3">{currencyFormatter.format(Number(product.price))}</p>
         <div className="flex items-center text-xl md:text-2xl gap-4">
           <Link
-            className="py-2 font-semibold bg-black flex-1 text-center border-2 border-white rounded-full text-white inline-block"
+            className="py-2 font-semibold bg-black hover:bg-white flex-1 text-center border-2 border-white rounded-full text-white hover:text-black inline-block"
             href={`/products/${product.id}`}>
             Ver mais
           </Link>
           <Link
-            className="py-2 font-semibold bg-white text-black inline-block flex-1 text-center rounded-full"
+            className="py-2 font-semibold bg-white hover:bg-gray text-black inline-block flex-1 text-center rounded-full"
             href={`products/${product.id}/checkout`}>
             Comprar
             <Image className="inline ml-1 md:ml-2" src={Carrinho} alt="Carrinho de compras" />
