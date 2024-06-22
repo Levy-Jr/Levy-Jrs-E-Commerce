@@ -6,7 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Carrinho from "/public/e-commerce/inicio/carrinho-icone.svg"
 import Perfil from "/public/e-commerce/inicio/perfil-icone.svg"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Menu from "/public/e-commerce/menu.svg"
 import Fechar from "/public/e-commerce/fechar-icone.svg"
 import { cn } from "@/lib/utils"
@@ -16,6 +16,10 @@ const Navbar = () => {
   const pathname = usePathname()
 
   const toggleMenu = () => setIsOpen(!isOpen)
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
 
   const routes = [
     {
